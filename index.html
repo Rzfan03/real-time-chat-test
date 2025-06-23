@@ -41,16 +41,16 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
             display: grid;
-            grid-template-columns: 1fr 3fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
         /* Header styles */
         .header {
             background-color: var(--white);
-            padding: 15px 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -61,7 +61,7 @@
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: var(--primary-color);
         }
@@ -70,16 +70,17 @@
         .sidebar {
             background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 15px;
             box-shadow: var(--shadow);
             height: fit-content;
+            order: -1; /* Move sidebar to top on mobile */
         }
 
         .user-profile {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             cursor: pointer;
             position: relative;
         }
@@ -95,10 +96,15 @@
             font-weight: bold;
             background-size: cover;
             background-position: center;
+            flex-shrink: 0;
         }
 
         .username {
             font-weight: 600;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .profile-menu {
@@ -119,20 +125,46 @@
         }
 
         .profile-menu-item {
-            padding: 8px 15px;
+            padding: 10px 15px;
             cursor: pointer;
             transition: var(--transition);
+            font-size: 14px;
         }
 
         .profile-menu-item:hover {
             background-color: var(--light-gray);
         }
 
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .nav-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--medium-gray);
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .nav-tab:hover:not(.active) {
+            color: var(--dark-gray);
+        }
+
         /* Main content styles */
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         /* Post creator styles */
@@ -153,11 +185,12 @@
         .post-input {
             width: 100%;
             border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-round);
-            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
             resize: none;
-            min-height: 80px;
+            min-height: 100px;
             margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .post-input:focus {
@@ -169,11 +202,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .post-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .action-button {
@@ -184,9 +219,10 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: var(--border-radius-round);
             transition: var(--transition);
+            font-size: 14px;
         }
 
         .action-button:hover {
@@ -203,6 +239,8 @@
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
+            font-size: 14px;
+            white-space: nowrap;
         }
 
         .post-button:hover {
@@ -218,16 +256,19 @@
             position: relative;
             margin-top: 10px;
             display: none;
+            width: 100%;
         }
 
-        .image-preview-container.hidden {
-            display: none;
+        .image-preview-container.show {
+            display: block;
         }
 
         .image-preview {
             max-width: 100%;
             max-height: 300px;
             border-radius: var(--border-radius);
+            display: block;
+            margin: 0 auto;
         }
 
         .remove-image {
@@ -263,17 +304,19 @@
             border-radius: var(--border-radius);
             padding: 15px;
             box-shadow: var(--shadow);
+            position: relative;
         }
 
         .post-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .post-user {
             font-weight: 600;
+            font-size: 15px;
         }
 
         .post-time {
@@ -282,7 +325,10 @@
         }
 
         .post-content {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
         }
 
         .post-image {
@@ -290,7 +336,7 @@
             max-height: 400px;
             object-fit: contain;
             border-radius: var(--border-radius);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .post-actions-bar {
@@ -298,6 +344,108 @@
             justify-content: space-between;
             border-top: 1px solid var(--border-color);
             padding-top: 10px;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: var(--border-radius);
+        }
+
+        .post-action:hover {
+            background-color: var(--light-gray);
+        }
+
+        .post-action.liked {
+            color: var(--accent-color);
+        }
+
+        .post-action-count {
+            font-size: 12px;
+        }
+
+        .delete-post {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .delete-post:hover {
+            color: var(--accent-color);
+        }
+
+        /* Comments section */
+        .comments-section {
+            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            display: none;
+        }
+
+        .comments-section.show {
+            display: block;
+        }
+
+        .comments-list {
+            margin-bottom: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-user {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .comment-content {
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .comment-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .comment-input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-round);
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .comment-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: var(--border-radius-round);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 13px;
         }
 
         /* Chat styles */
@@ -311,6 +459,28 @@
             height: 400px;
         }
 
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chat-title {
+            font-weight: 600;
+        }
+
+        .chat-back-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: 600;
+            display: none;
+        }
+
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -318,12 +488,13 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .message {
             display: flex;
             gap: 10px;
-            max-width: 80%;
+            max-width: 85%;
         }
 
         .message.sent {
@@ -339,6 +510,8 @@
             background-color: var(--light-gray);
             padding: 10px 15px;
             border-radius: var(--border-radius);
+            font-size: 14px;
+            word-break: break-word;
         }
 
         .message.sent .message-content {
@@ -367,8 +540,9 @@
             flex: 1;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-round);
-            padding: 10px 15px;
+            padding: 12px 15px;
             resize: none;
+            font-size: 14px;
         }
 
         .chat-input:focus {
@@ -385,6 +559,8 @@
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
+            font-size: 14px;
+            white-space: nowrap;
         }
 
         .send-message-button:hover {
@@ -394,6 +570,34 @@
         .send-message-button:disabled {
             background-color: var(--medium-gray);
             cursor: not-allowed;
+        }
+
+        /* Users list for private chat */
+        .users-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .user-item.active {
+            background-color: rgba(66, 133, 244, 0.1);
         }
 
         /* Modal styles */
@@ -411,6 +615,7 @@
             opacity: 0;
             pointer-events: none;
             transition: var(--transition);
+            padding: 15px;
         }
 
         .modal.show {
@@ -422,15 +627,17 @@
             background-color: var(--white);
             border-radius: var(--border-radius);
             padding: 20px;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
             box-shadow: var(--shadow);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-title {
             margin-bottom: 20px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
         }
 
@@ -438,8 +645,9 @@
             width: 100%;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            padding: 10px 15px;
+            padding: 12px 15px;
             margin-bottom: 20px;
+            font-size: 14px;
         }
 
         .modal-input:focus {
@@ -459,6 +667,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
+            font-size: 14px;
         }
 
         .modal-button.primary {
@@ -507,39 +716,13 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Message actions */
-        .message-actions {
-            display: none;
-            position: absolute;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            z-index: 10;
-            padding: 5px 0;
-        }
-
-        .message:hover .message-actions {
-            display: block;
-        }
-
-        .message-action {
-            padding: 5px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .message-action:hover {
-            background-color: var(--light-gray);
-        }
-
         /* Reply indicator */
         .reply-indicator {
             background-color: var(--light-gray);
-            padding: 8px;
+            padding: 10px;
             border-radius: var(--border-radius);
             margin-bottom: 10px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--medium-gray);
             display: none;
         }
@@ -556,16 +739,94 @@
             color: var(--accent-color);
             cursor: pointer;
             font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .sidebar {
+                order: 0; /* Reset order for desktop */
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .username {
+                font-size: 16px;
+            }
+            
+            .post-input {
+                min-height: 80px;
+            }
+            
+            .message {
+                max-width: 80%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                grid-template-columns: 300px 1fr;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--medium-gray);
+            cursor: pointer;
+        }
+
+        @media (max-width: 767px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .sidebar.show {
+                display: block;
+            }
+        }
+
+        /* Better touch targets */
+        button, .action-button, .profile-menu-item {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Prevent zoom on input focus on mobile */
+        @media (max-width: 767px) {
+            input, textarea {
+                font-size: 16px !important;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
+        <button class="menu-toggle" id="menuToggle">☰</button>
         <div class="logo">Hello!</div>
+        <div style="width: 40px;"></div> <!-- Spacer for alignment -->
     </div>
     
     <div class="container">
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="user-profile">
                 <div class="profile-pic" id="currentUserPic"></div>
                 <div class="username" id="currentUsername">User</div>
@@ -574,6 +835,15 @@
                     <div class="profile-menu-item" id="changeNameBtn">Change Name</div>
                     <div class="profile-menu-item" id="changePhotoBtn">Change Photo</div>
                 </div>
+            </div>
+
+            <div class="nav-tabs">
+                <div class="nav-tab active" id="publicChatTab">Public Chat</div>
+                <div class="nav-tab" id="privateChatTab">Private Chat</div>
+            </div>
+
+            <div id="usersListContainer">
+                <!-- Users list will be loaded here for private chat -->
             </div>
         </div>
         
@@ -586,7 +856,7 @@
                 
                 <textarea class="post-input" id="postText" placeholder="Share your thoughts..."></textarea>
                 
-                <div class="image-preview-container hidden" id="imagePreviewContainer">
+                <div class="image-preview-container" id="imagePreviewContainer">
                     <img src="" class="image-preview" id="imagePreview" alt="Preview">
                     <button class="remove-image" id="removeImage">×</button>
                 </div>
@@ -612,6 +882,12 @@
             </div>
             
             <div class="chat-container">
+                <div class="chat-header">
+                    <button class="chat-back-button" id="chatBackButton">← Back</button>
+                    <div class="chat-title" id="chatTitle">Public Chat</div>
+                    <div style="width: 60px;"></div> <!-- Spacer for alignment -->
+                </div>
+                
                 <div class="reply-indicator" id="replyIndicator">
                     <div class="reply-info">
                         <span>Replying to <span id="replyingToName"></span></span>
@@ -651,7 +927,7 @@
             <div class="modal-title">Change Your Profile Photo</div>
             <input type="file" class="modal-input" id="profilePhotoUpload" accept="image/*">
             
-            <div class="image-preview-container hidden" id="profilePhotoPreviewContainer">
+            <div class="image-preview-container" id="profilePhotoPreviewContainer">
                 <img src="" class="image-preview" id="profilePhotoPreview" alt="Preview">
             </div>
             
@@ -717,17 +993,30 @@
         const replyIndicator = document.getElementById('replyIndicator');
         const replyingToName = document.getElementById('replyingToName');
         const cancelReply = document.getElementById('cancelReply');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const publicChatTab = document.getElementById('publicChatTab');
+        const privateChatTab = document.getElementById('privateChatTab');
+        const usersListContainer = document.getElementById('usersListContainer');
+        const chatTitle = document.getElementById('chatTitle');
+        const chatBackButton = document.getElementById('chatBackButton');
 
-        // Chat reply state
+        // Chat state
         let replyingToMessageId = null;
         let replyingToUserName = null;
+        let currentChatMode = 'public'; // 'public' or 'private'
+        let currentPrivateChatUserId = null;
 
         // Initialize the app
         function init() {
             loadUserData();
             setupEventListeners();
             loadPosts();
-            loadChatMessages();
+            loadPublicChatMessages();
+            
+            // Hide preview containers initially
+            imagePreviewContainer.classList.add('hidden');
+            profilePhotoPreviewContainer.classList.add('hidden');
         }
 
         // Load user data from localStorage
@@ -795,6 +1084,11 @@
 
         // Set up event listeners
         function setupEventListeners() {
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+            });
+            
             // Profile menu toggle
             currentUserPic.addEventListener('click', toggleProfileMenu);
             currentUsername.addEventListener('click', toggleProfileMenu);
@@ -846,6 +1140,91 @@
             
             // Cancel reply
             cancelReply.addEventListener('click', cancelMessageReply);
+            
+            // Chat mode tabs
+            publicChatTab.addEventListener('click', () => switchChatMode('public'));
+            privateChatTab.addEventListener('click', () => switchChatMode('private'));
+            
+            // Chat back button
+            chatBackButton.addEventListener('click', () => {
+                currentPrivateChatUserId = null;
+                switchChatMode('private');
+            });
+        }
+
+        // Switch between public and private chat
+        function switchChatMode(mode) {
+            currentChatMode = mode;
+            
+            if (mode === 'public') {
+                publicChatTab.classList.add('active');
+                privateChatTab.classList.remove('active');
+                usersListContainer.innerHTML = '';
+                chatTitle.textContent = 'Public Chat';
+                chatBackButton.style.display = 'none';
+                loadPublicChatMessages();
+            } else {
+                publicChatTab.classList.remove('active');
+                privateChatTab.classList.add('active');
+                chatTitle.textContent = 'Private Chat';
+                chatBackButton.style.display = currentPrivateChatUserId ? 'block' : 'none';
+                loadUsersList();
+                
+                if (currentPrivateChatUserId) {
+                    loadPrivateChatMessages(currentPrivateChatUserId);
+                } else {
+                    chatMessagesContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--medium-gray);">Select a user to start private chat</div>';
+                }
+            }
+        }
+
+        // Load users list for private chat
+        function loadUsersList() {
+            // In a real app, you would fetch users from your database
+            // For demo purposes, we'll create some dummy users
+            const dummyUsers = [
+                { id: 'user_1', name: 'John Doe', color: '#4285f4' },
+                { id: 'user_2', name: 'Jane Smith', color: '#34a853' },
+                { id: 'user_3', name: 'Mike Johnson', color: '#ea4335' },
+                { id: 'user_4', name: 'Sarah Williams', color: '#fbbc05' },
+                { id: 'user_5', name: 'David Brown', color: '#673ab7' }
+            ];
+            
+            // Add current user to the list (for demo purposes)
+            const users = [...dummyUsers, { 
+                id: currentUserId, 
+                name: currentUserName, 
+                color: currentUserColor,
+                photoUrl: currentUserPhotoUrl 
+            }];
+            
+            usersListContainer.innerHTML = '';
+            
+            users.forEach(user => {
+                if (user.id !== currentUserId) { // Don't show current user in the list
+                    const userElement = document.createElement('div');
+                    userElement.className = 'user-item';
+                    userElement.dataset.userId = user.id;
+                    
+                    const userPic = user.photoUrl 
+                        ? `<div class="profile-pic" style="background-image: url(${user.photoUrl}); background-color: ${user.color}"></div>`
+                        : `<div class="profile-pic" style="background-color: ${user.color}">${user.name.charAt(0).toUpperCase()}</div>`;
+                    
+                    userElement.innerHTML = `
+                        ${userPic}
+                        <div>${user.name}</div>
+                    `;
+                    
+                    userElement.addEventListener('click', () => {
+                        currentPrivateChatUserId = user.id;
+                        chatTitle.textContent = `Chat with ${user.name}`;
+                        chatBackButton.style.display = 'block';
+                        loadPrivateChatMessages(user.id);
+                    });
+                    
+                    usersListContainer.appendChild(userElement);
+                }
+            });
         }
 
         // Toggle profile menu
@@ -1006,6 +1385,16 @@
                 ? `<div class="profile-pic" style="background-image: url(${post.userPhotoUrl}); background-color: ${post.userColor || '#4285f4'}"></div>`
                 : `<div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>`;
             
+            // Check if the post belongs to the current user
+            const isCurrentUserPost = post.userId === currentUserId;
+            
+            // Get like count
+            const likeCount = post.likes ? Object.keys(post.likes).length : 0;
+            const isLiked = post.likes && post.likes[currentUserId];
+            
+            // Get comment count
+            const commentCount = post.comments ? post.comments.length : 0;
+            
             postElement.innerHTML = `
                 <div class="post-header">
                     ${userDisplay}
@@ -1013,36 +1402,167 @@
                         <div class="post-user">${post.userName || 'User'}</div>
                         <div class="post-time">${timeAgo}</div>
                     </div>
+                    ${isCurrentUserPost ? `<button class="delete-post" data-post-id="${post.id}">×</button>` : ''}
                 </div>
                 <div class="post-content">${post.text}</div>
                 ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image" onerror="this.style.display='none'">` : ''}
                 <div class="post-actions-bar">
-                    <button class="action-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="post-action ${isLiked ? 'liked' : ''}" data-post-id="${post.id}" data-action="like">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                         </svg>
-                        Like
-                    </button>
-                    <button class="action-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <span>Like</span>
+                        ${likeCount > 0 ? `<span class="post-action-count">${likeCount}</span>` : ''}
+                    </div>
+                    <div class="post-action" data-post-id="${post.id}" data-action="comment">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
-                        Comment
-                    </button>
-                    <button class="action-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <span>Comment</span>
+                        ${commentCount > 0 ? `<span class="post-action-count">${commentCount}</span>` : ''}
+                    </div>
+                    <div class="post-action" data-post-id="${post.id}" data-action="share">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="18" cy="5" r="3"></circle>
                             <circle cx="6" cy="12" r="3"></circle>
                             <circle cx="18" cy="19" r="3"></circle>
                             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                         </svg>
-                        Share
-                    </button>
+                        <span>Share</span>
+                    </div>
+                </div>
+                <div class="comments-section" id="comments-${post.id}">
+                    <div class="comments-list" id="comments-list-${post.id}">
+                        ${post.comments ? post.comments.map(comment => `
+                            <div class="comment">
+                                <div class="comment-user">${comment.userName}:</div>
+                                <div class="comment-content">${comment.text}</div>
+                            </div>
+                        `).join('') : ''}
+                    </div>
+                    <div class="comment-input-container">
+                        <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Write a comment...">
+                        <button class="comment-button" data-post-id="${post.id}">Post</button>
+                    </div>
                 </div>
             `;
             
+            // Add event listeners
+            const likeButton = postElement.querySelector('[data-action="like"]');
+            const commentButton = postElement.querySelector('[data-action="comment"]');
+            const shareButton = postElement.querySelector('[data-action="share"]');
+            const deleteButton = postElement.querySelector('.delete-post');
+            const commentInput = postElement.querySelector('.comment-input');
+            const commentPostButton = postElement.querySelector('.comment-button');
+            const commentsSection = postElement.querySelector('.comments-section');
+            
+            if (likeButton) {
+                likeButton.addEventListener('click', () => toggleLike(post.id));
+            }
+            
+            if (commentButton) {
+                commentButton.addEventListener('click', () => {
+                    commentsSection.classList.toggle('show');
+                    if (commentsSection.classList.contains('show')) {
+                        commentInput.focus();
+                    }
+                });
+            }
+            
+            if (shareButton) {
+                shareButton.addEventListener('click', () => {
+                    alert('Share functionality would be implemented here');
+                });
+            }
+            
+            if (deleteButton) {
+                deleteButton.addEventListener('click', () => {
+                    if (confirm("Are you sure you want to delete this post?")) {
+                        db.collection("posts").doc(post.id).delete()
+                            .catch(error => {
+                                console.error("Error deleting post:", error);
+                                alert("Error deleting post. Please try again.");
+                            });
+                    }
+                });
+            }
+            
+            if (commentPostButton) {
+                commentPostButton.addEventListener('click', () => {
+                    const commentText = commentInput.value.trim();
+                    if (commentText) {
+                        addComment(post.id, commentText);
+                        commentInput.value = '';
+                    }
+                });
+            }
+            
+            if (commentInput) {
+                commentInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const commentText = commentInput.value.trim();
+                        if (commentText) {
+                            addComment(post.id, commentText);
+                            commentInput.value = '';
+                        }
+                    }
+                });
+            }
+            
             postsContainer.appendChild(postElement);
+        }
+
+        // Toggle like on a post
+        function toggleLike(postId) {
+            const postRef = db.collection("posts").doc(postId);
+            
+            db.runTransaction((transaction) => {
+                return transaction.get(postRef).then((postDoc) => {
+                    if (!postDoc.exists) {
+                        throw "Document does not exist!";
+                    }
+                    
+                    const postData = postDoc.data();
+                    const likes = postData.likes || {};
+                    const likeCount = Object.keys(likes).length;
+                    
+                    if (likes[currentUserId]) {
+                        // Unlike
+                        delete likes[currentUserId];
+                    } else {
+                        // Like
+                        likes[currentUserId] = true;
+                    }
+                    
+                    transaction.update(postRef, { likes: likes });
+                    return { likes: likes, likeCount: likeCount };
+                });
+            }).then(() => {
+                console.log("Like updated successfully");
+            }).catch((error) => {
+                console.error("Error updating like: ", error);
+            });
+        }
+
+        // Add comment to a post
+        function addComment(postId, commentText) {
+            const postRef = db.collection("posts").doc(postId);
+            const newComment = {
+                userId: currentUserId,
+                userName: currentUserName,
+                userPicText: currentUserPicText,
+                userColor: currentUserColor,
+                userPhotoUrl: currentUserPhotoUrl || null,
+                text: commentText,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            postRef.update({
+                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
+            }).catch((error) => {
+                console.error("Error adding comment: ", error);
+            });
         }
 
         // Upload image to ImgBB (free service)
@@ -1133,7 +1653,9 @@
                 userPhotoUrl: currentUserPhotoUrl || null,
                 text: text,
                 imageUrl: imageUrl,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                likes: {},
+                comments: []
             };
             
             // Add to Firestore
@@ -1186,9 +1708,9 @@
             reader.readAsDataURL(file);
         }
 
-        // Load chat messages from Firestore
-        function loadChatMessages() {
-            db.collection("messages")
+        // Load public chat messages from Firestore
+        function loadPublicChatMessages() {
+            db.collection("publicMessages")
                 .orderBy("timestamp", "asc")
                 .onSnapshot((snapshot) => {
                     chatMessagesContainer.innerHTML = '';
@@ -1198,10 +1720,37 @@
                         renderMessage(message);
                     });
                     // Scroll to bottom
-                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                    setTimeout(() => {
+                        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                    }, 100);
                 }, (error) => {
                     console.error("Error loading messages:", error);
                     alert("Error loading messages. Please refresh the page.");
+                });
+        }
+
+        // Load private chat messages from Firestore
+        function loadPrivateChatMessages(otherUserId) {
+            // Create a unique chat ID by combining user IDs in alphabetical order
+            const chatId = [currentUserId, otherUserId].sort().join('_');
+            
+            db.collection("privateMessages")
+                .where("chatId", "==", chatId)
+                .orderBy("timestamp", "asc")
+                .onSnapshot((snapshot) => {
+                    chatMessagesContainer.innerHTML = '';
+                    snapshot.forEach((doc) => {
+                        const message = doc.data();
+                        message.id = doc.id; // Add document ID to message
+                        renderMessage(message);
+                    });
+                    // Scroll to bottom
+                    setTimeout(() => {
+                        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                    }, 100);
+                }, (error) => {
+                    console.error("Error loading private messages:", error);
+                    alert("Error loading private messages. Please refresh the page.");
                 });
         }
 
@@ -1262,7 +1811,8 @@
             if (deleteBtn) {
                 deleteBtn.addEventListener('click', (e) => {
                     if (confirm("Are you sure you want to delete this message?")) {
-                        db.collection("messages").doc(e.target.dataset.messageId).delete()
+                        const collection = currentChatMode === 'public' ? 'publicMessages' : 'privateMessages';
+                        db.collection(collection).doc(e.target.dataset.messageId).delete()
                             .catch(error => {
                                 console.error("Error deleting message:", error);
                                 alert("Error deleting message. Please try again.");
@@ -1311,9 +1861,20 @@
                 newMessage.replyToUserName = replyingToUserName;
             }
             
+            // Determine which collection to use based on chat mode
+            let collection;
+            if (currentChatMode === 'public') {
+                collection = 'publicMessages';
+            } else {
+                collection = 'privateMessages';
+                // For private messages, add chatId field
+                newMessage.chatId = [currentUserId, currentPrivateChatUserId].sort().join('_');
+                newMessage.recipientId = currentPrivateChatUserId;
+            }
+            
             // Add to Firestore
             try {
-                await db.collection("messages").add(newMessage);
+                await db.collection(collection).add(newMessage);
                 chatInput.value = '';
                 cancelMessageReply();
             } catch (error) {
