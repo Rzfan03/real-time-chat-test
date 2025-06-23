@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Social Media</title>
+    <!-- Add Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+            --medium-gray: #757575;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .username {
+            font-weight: 500;
+        }
+        
+        main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .posts-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .create-post {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .post-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .post-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .post-input textarea {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.75rem 1rem;
+            resize: none;
+            min-height: 50px;
+            font-size: 1rem;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .action-button:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .post-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .post-button:hover {
+            background-color: #3367d6;
+        }
+        
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-user {
+            font-weight: 500;
+        }
+        
+        .post-time {
+            color: var(--medium-gray);
+            font-size: 0.8rem;
+        }
+        
+        .post-content {
+            margin: 0.5rem 0;
+        }
+        
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            max-height: 500px;
+            object-fit: cover;
+        }
+        
+        .post-actions-bar {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .chat-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        
+        .chat-header {
+            font-weight: 500;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-right: 0.5rem;
+        }
+        
+        .message {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .message.received {
+            align-self: flex-start;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-content {
+            max-width: 70%;
+        }
+        
+        .message.received .message-content {
+            background-color: var(--light-gray);
+            border-radius: 0 12px 12px 12px;
+            padding: 0.75rem;
+        }
+        
+        .message.sent .message-content {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 12px 0 12px 12px;
+            padding: 0.75rem;
+        }
+        
+        .message-user {
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+        }
+        
+        .send-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .send-button:hover {
+            background-color: #3367d6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .remove-image {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .remove-image:hover {
+            background-color: #d33426;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">SimpleSocial</div>
+                <div class="user-profile">
+                    <div class="profile-pic" id="currentUserPic">U</div>
+                    <span class="username" id="currentUsername">User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main>
+            <section class="posts-section">
+                <div class="create-post">
+                    <div class="post-form">
+                        <div class="post-input">
+                            <div class="profile-pic" id="postUserPic">U</div>
+                            <textarea id="postText" placeholder="What's on your mind?"></textarea>
+                        </div>
+                        <div id="imagePreviewContainer" class="hidden">
+                            <img id="imagePreview" src="#" alt="Preview">
+                            <button class="remove-image" id="removeImage">Remove Image</button>
+                        </div>
+                        <div class="post-actions">
+                            <div>
+                                <button class="action-button" id="addPhotoBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    Photo
+                                </button>
+                                <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                            </div>
+                            <button class="post-button" id="postButton">Post</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="postsContainer"></div>
+            </section>
+            
+            <section class="chat-section">
+                <h3 class="chat-header">Chat</h3>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will appear here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button class="send-button" id="sendMessageBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+     // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCmIgFcDRapU6WigJSJCCgznV_cktlyAuI",
+  authDomain: "my-app-e6c13.firebaseapp.com",
+  projectId: "my-app-e6c13",
+  storageBucket: "my-app-e6c13.firebasestorage.app",
+  messagingSenderId: "91681597709",
+  appId: "1:91681597709:web:c1d4673df4fe48431d2844",
+  measurementId: "G-LCWJ6934K1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Generate a random user ID for the current session
+        const currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+        let currentUserName = "User";
+        let currentUserPicText = "U";
+
+        // DOM elements
+        const currentUserPic = document.getElementById('currentUserPic');
+        const currentUsername = document.getElementById('currentUsername');
+        const postUserPic = document.getElementById('postUserPic');
+        const postText = document.getElementById('postText');
+        const postButton = document.getElementById('postButton');
+        const postsContainer = document.getElementById('postsContainer');
+        const addPhotoBtn = document.getElementById('addPhotoBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const removeImage = document.getElementById('removeImage');
+        const chatMessagesContainer = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+        // Initialize the app
+        function init() {
+            // Set random user info
+            const colors = ['#4285f4', '#34a853', '#ea4335', '#fbbc05', '#673ab7'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            currentUserPic.style.backgroundColor = randomColor;
+            
+            // Prompt for username if not set
+            const storedName = localStorage.getItem('socialMediaUsername');
+            if (storedName) {
+                currentUserName = storedName;
+                currentUserPicText = storedName.charAt(0).toUpperCase();
+            } else {
+                const name = prompt("Enter your name to get started:", "User");
+                if (name) {
+                    currentUserName = name;
+                    currentUserPicText = name.charAt(0).toUpperCase();
+                    localStorage.setItem('socialMediaUsername', name);
+                }
+            }
+            
+            currentUserPic.textContent = currentUserPicText;
+            currentUsername.textContent = currentUserName;
+            postUserPic.textContent = currentUserPicText;
+            postUserPic.style.backgroundColor = randomColor;
+
+            // Load posts and chat messages
+            loadPosts();
+            loadChatMessages();
+            
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Post button click
+            postButton.addEventListener('click', createPost);
+            
+            // Add photo button click
+            addPhotoBtn.addEventListener('click', () => imageUpload.click());
+            
+            // Image upload change
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Remove image button click
+            removeImage.addEventListener('click', () => {
+                imagePreviewContainer.classList.add('hidden');
+                imageUpload.value = '';
+            });
+            
+            // Send message button click
+            sendMessageBtn.addEventListener('click', sendMessage);
+            
+            // Send message on Enter key
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+
+        // Load posts from Firestore
+        function loadPosts() {
+            db.collection("posts")
+                .orderBy("timestamp", "desc")
+                .onSnapshot((snapshot) => {
+                    postsContainer.innerHTML = '';
+                    snapshot.forEach((doc) => {
+                        const post = doc.data();
+                        renderPost(post);
+                    });
+                });
+        }
+
+        // Render a single post
+        function renderPost(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            
+            // Format time
+            const timeAgo = getTimeAgo(post.timestamp.toDate());
+            
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>
+                    <div>
+                        <div class="post-user">${post.userName || 'User'}</div>
+                        <div class="post-time">${timeAgo}</div>
+                    </div>
+                </div>
+                <div class="post-content">${post.text}</div>
+                ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
+                <div class="post-actions-bar">
+                    <button class="action-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        Like
+                    </button>
+                    <button class="action-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Comment
+                    </button>
+                    <button class="action-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        Share
+                    </button>
+                </div>
+            `;
+            
+            postsContainer.appendChild(postElement);
+        }
+
+        // Create a new post
+        async function createPost() {
+            const text = postText.value.trim();
+            const imageFile = imageUpload.files[0];
+            
+            if (!text && !imageFile) return;
+            
+            // Show loading state
+            const originalButtonText = postButton.textContent;
+            postButton.innerHTML = '<span class="loading"></span>';
+            postButton.disabled = true;
+
+            let imageUrl = '';
+            
+            // If there's an image, upload it to Firebase Storage
+            if (imageFile) {
+                try {
+                    const storageRef = storage.ref();
+                    const fileRef = storageRef.child(`posts/${currentUserId}_${Date.now()}`);
+                    const snapshot = await fileRef.put(imageFile);
+                    imageUrl = await snapshot.ref.getDownloadURL();
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    postButton.textContent = originalButtonText;
+                    postButton.disabled = false;
+                    return;
+                }
+            }
+            
+            // Create a new post object
+            const newPost = {
+                userId: currentUserId,
+                userName: currentUserName,
+                userPicText: currentUserPicText,
+                userColor: currentUserPic.style.backgroundColor,
+                text: text,
+                imageUrl: imageUrl,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Add to Firestore
+            try {
+                await db.collection("posts").add(newPost);
+                
+                // Clear the form
+                postText.value = '';
+                imagePreviewContainer.classList.add('hidden');
+                imageUpload.value = '';
+            } catch (error) {
+                console.error("Error adding post:", error);
+            } finally {
+                postButton.textContent = originalButtonText;
+                postButton.disabled = false;
+            }
+        }
+
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Load chat messages from Firestore
+        function loadChatMessages() {
+            db.collection("messages")
+                .orderBy("timestamp", "asc")
+                .onSnapshot((snapshot) => {
+                    chatMessagesContainer.innerHTML = '';
+                    snapshot.forEach((doc) => {
+                        const message = doc.data();
+                        renderMessage(message);
+                    });
+                    // Scroll to bottom
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                });
+        }
+
+        // Render a single chat message
+        function renderMessage(message) {
+            const isCurrentUser = message.userId === currentUserId;
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isCurrentUser ? 'sent' : 'received'}`;
+            
+            messageElement.innerHTML = `
+                <div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}">${message.userPicText || 'U'}</div>
+                <div class="message-content">
+                    ${!isCurrentUser ? `<div class="message-user">${message.userName || 'User'}</div>` : ''}
+                    <div>${message.text}</div>
+                </div>
+            `;
+            
+            chatMessagesContainer.appendChild(messageElement);
+        }
+
+        // Send a chat message
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            // Show loading state
+            const originalButtonText = sendMessageBtn.innerHTML;
+            sendMessageBtn.innerHTML = '<span class="loading"></span>';
+            sendMessageBtn.disabled = true;
+            
+            // Create new message
+            const newMessage = {
+                userId: currentUserId,
+                userName: currentUserName,
+                userPicText: currentUserPicText,
+                userColor: currentUserPic.style.backgroundColor,
+                text: text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Add to Firestore
+            try {
+                await db.collection("messages").add(newMessage);
+                chatInput.value = '';
+            } catch (error) {
+                console.error("Error sending message:", error);
+            } finally {
+                sendMessageBtn.innerHTML = originalButtonText;
+                sendMessageBtn.disabled = false;
+            }
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+            
+            return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
