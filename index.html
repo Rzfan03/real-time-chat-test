@@ -3,478 +3,680 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RChat!</title>
-    <!-- Firebase SDKs (Firestore only) -->
+    <title>Simple Social Media</title>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <style>
-     :root {
-    --primary-color: #4285f4;
-    --primary-hover: #3367d6;
-    --secondary-color: #34a853;
-    --accent-color: #ea4335;
-    --accent-hover: #d33426;
-    --light-gray: #f5f5f5;
-    --medium-gray: #757575;
-    --dark-gray: #333;
-    --white: #ffffff;
-    --border-color: #e0e0e0;
-    --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --border-radius: 8px;
-    --border-radius-round: 20px;
-    --transition: all 0.3s ease;
-}
+        :root {
+            --primary-color: #4285f4;
+            --primary-hover: #3367d6;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --accent-hover: #d33426;
+            --light-gray: #f5f5f5;
+            --medium-gray: #757575;
+            --dark-gray: #333;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+            --border-radius-round: 20px;
+            --transition: all 0.3s ease;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-body {
-    background-color: var(--light-gray);
-    color: var(--dark-gray);
-    line-height: 1.6;
-    min-height: 100vh;
-}
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
 
-/* Header Styles */
-header {
-    background-color: var(--white);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    padding: 1rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
 
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
 
-.profile-pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: var(--medium-gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
-    font-weight: bold;
-    flex-shrink: 0;
-}
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            flex-shrink: 0;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+        }
 
-.username {
-    font-weight: 500;
-}
+        .username {
+            font-weight: 500;
+            cursor: pointer;
+        }
 
-/* Main Content Layout */
-main {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem 0;
-}
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 0.5rem;
+            width: 200px;
+            z-index: 1000;
+            display: none;
+        }
 
-@media (min-width: 768px) {
-    main {
-        grid-template-columns: 2fr 1fr;
-    }
-}
+        .profile-menu.show {
+            display: block;
+        }
 
-/* Posts Section */
-.posts-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .profile-menu-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.create-post {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: var(--shadow);
-}
+        .profile-menu-item:hover {
+            background-color: var(--light-gray);
+        }
 
-.post-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
 
-.post-input {
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
-}
+        .modal.show {
+            display: flex;
+        }
 
-.post-input textarea {
-    flex: 1;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-round);
-    padding: 0.75rem 1rem;
-    resize: none;
-    min-height: 50px;
-    font-size: 1rem;
-    transition: var(--transition);
-}
+        .modal-content {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
 
-.post-input textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-}
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
 
-.post-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
 
-.action-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--medium-gray);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: var(--transition);
-}
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--medium-gray);
+        }
 
-.action-button:hover {
-    background-color: var(--light-gray);
-}
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
 
-.post-button {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 0.5rem 1.25rem;
-    border-radius: var(--border-radius-round);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-}
+        .form-group {
+            margin-bottom: 1rem;
+        }
 
-.post-button:hover {
-    background-color: var(--primary-hover);
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
 
-.post-button:disabled {
-    background-color: var(--medium-gray);
-    cursor: not-allowed;
-}
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
 
-/* Posts List */
-.post {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: var(--shadow);
-}
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
 
-.post-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-}
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
 
-.post-user {
-    font-weight: 500;
-}
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
 
-.post-time {
-    color: var(--medium-gray);
-    font-size: 0.8rem;
-}
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+        }
 
-.post-content {
-    margin: 0.75rem 0;
-    white-space: pre-line;
-    word-break: break-word;
-}
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
 
-.post-image {
-    width: 100%;
-    border-radius: var(--border-radius);
-    margin: 0.75rem 0;
-    max-height: 500px;
-    object-fit: contain;
-    background-color: var(--light-gray);
-}
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            border: none;
+        }
 
-.post-actions-bar {
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid var(--border-color);
-    padding-top: 0.75rem;
-    margin-top: 0.75rem;
-}
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
 
-/* Chat Section */
-.chat-section {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    height: 600px;
-}
+        /* Main Content Layout */
+        main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
 
-.chat-header {
-    font-weight: 500;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 1rem;
-}
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
 
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding-right: 0.5rem;
-}
+        /* Posts Section */
+        .posts-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-.message {
-    display: flex;
-    gap: 0.75rem;
-    max-width: 90%;
-}
+        .create-post {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        }
 
-.message.received {
-    align-self: flex-start;
-}
+        .post-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-.message.sent {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
+        .post-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
 
-.message-content {
-    max-width: 100%;
-}
+        .post-input textarea {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-round);
+            padding: 0.75rem 1rem;
+            resize: none;
+            min-height: 50px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
 
-.message.received .message-content {
-    background-color: var(--light-gray);
-    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
-    padding: 0.75rem;
-    word-break: break-word;
-}
+        .post-input textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
 
-.message.sent .message-content {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
-    padding: 0.75rem;
-    word-break: break-word;
-}
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.message-user {
-    font-weight: 500;
-    font-size: 0.8rem;
-    margin-bottom: 0.25rem;
-}
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
 
-.chat-input {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
+        .action-button:hover {
+            background-color: var(--light-gray);
+        }
 
-.chat-input input {
-    flex: 1;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-round);
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    transition: var(--transition);
-}
+        .post-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--border-radius-round);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
 
-.chat-input input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-}
+        .post-button:hover {
+            background-color: var(--primary-hover);
+        }
 
-.send-button {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-}
+        .post-button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
 
-.send-button:hover {
-    background-color: var(--primary-hover);
-}
+        /* Posts List */
+        .post {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+        }
 
-/* Image Preview */
-#imagePreviewContainer {
-    display: none;
-    margin-top: 0.75rem;
-    position: relative;
-}
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
 
-#imagePreviewContainer.show {
-    display: block;
-}
+        .post-user {
+            font-weight: 500;
+        }
 
-#imagePreview {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: var(--border-radius);
-    display: block;
-    margin-bottom: 0.5rem;
-}
+        .post-time {
+            color: var(--medium-gray);
+            font-size: 0.8rem;
+        }
 
-.remove-image {
-    background-color: var(--accent-color);
-    color: var(--white);
-    border: none;
-    padding: 0.35rem 0.75rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: var(--transition);
-}
+        .post-content {
+            margin: 0.75rem 0;
+            white-space: pre-line;
+            word-break: break-word;
+        }
 
-.remove-image:hover {
-    background-color: var(--accent-hover);
-}
+        .post-image {
+            width: 100%;
+            border-radius: var(--border-radius);
+            margin: 0.75rem 0;
+            max-height: 500px;
+            object-fit: contain;
+            background-color: var(--light-gray);
+        }
 
-/* Loading Indicator */
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: var(--white);
-    animation: spin 1s ease-in-out infinite;
-}
+        .post-actions-bar {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+        /* Chat Section */
+        .chat-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
 
-/* Scrollbar Styles */
-::-webkit-scrollbar {
-    width: 8px;
-}
+        .chat-header {
+            font-weight: 500;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
 
-::-webkit-scrollbar-track {
-    background: var(--light-gray);
-    border-radius: 4px;
-}
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-right: 0.5rem;
+        }
 
-::-webkit-scrollbar-thumb {
-    background: var(--medium-gray);
-    border-radius: 4px;
-}
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 90%;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-gray);
-}
+        .message.received {
+            align-self: flex-start;
+        }
 
-/* Utility Classes */
-.hidden {
-    display: none !important;
-}
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
 
-.show {
-    display: block !important;
-}
+        .message-content {
+            max-width: 100%;
+        }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .post-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-end;
-    }
-    
-    .post-actions-bar {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    
-    .post-actions-bar .action-button {
-        padding: 0.25rem;
-    }
-    
-    .chat-section {
-        height: 400px;
-    }
-}
+        .message.received .message-content {
+            background-color: var(--light-gray);
+            border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+            padding: 0.75rem;
+            word-break: break-word;
+        }
 
-@media (max-width: 480px) {
-    .header-content {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-    
-    .post-input {
-        flex-direction: column;
-    }
-    
-    .post-input textarea {
-        width: 100%;
-    }
-}
+        .message.sent .message-content {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+            padding: 0.75rem;
+            word-break: break-word;
+        }
+
+        .message-user {
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-round);
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        .send-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .send-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Image Preview */
+        #imagePreviewContainer {
+            display: none;
+            margin-top: 0.75rem;
+            position: relative;
+        }
+
+        #imagePreviewContainer.show {
+            display: block;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .remove-image {
+            background-color: var(--accent-color);
+            color: var(--white);
+            border: none;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .remove-image:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Loading Indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--medium-gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-gray);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .post-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-end;
+            }
+            
+            .post-actions-bar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .post-actions-bar .action-button {
+                padding: 0.25rem;
+            }
+            
+            .chat-section {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .post-input {
+                flex-direction: column;
+            }
+            
+            .post-input textarea {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- [HTML structure remains exactly the same] -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">RChat</div>
+                <div class="logo">SimpleSocial</div>
                 <div class="user-profile">
                     <div class="profile-pic" id="currentUserPic">U</div>
                     <span class="username" id="currentUsername">User</span>
+                    <div class="profile-menu" id="profileMenu">
+                        <div class="profile-menu-item" id="changeNameBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                            </svg>
+                            Change Name
+                        </div>
+                        <div class="profile-menu-item" id="changePhotoBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            Change Photo
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
+    
+    <!-- Change Name Modal -->
+    <div class="modal" id="nameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Your Name</div>
+                <button class="close-modal" id="closeNameModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newName">New Name</label>
+                    <input type="text" id="newName" class="form-control" placeholder="Enter your new name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelNameChange">Cancel</button>
+                <button class="btn btn-primary" id="saveNameChange">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Photo Modal -->
+    <div class="modal" id="photoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Your Profile Photo</div>
+                <button class="close-modal" id="closePhotoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="profilePhotoUpload">Upload Photo</label>
+                    <input type="file" id="profilePhotoUpload" accept="image/*" class="form-control">
+                </div>
+                <div id="profilePhotoPreviewContainer" class="hidden">
+                    <img id="profilePhotoPreview" src="#" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: var(--border-radius); margin-top: 1rem;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelPhotoChange">Cancel</button>
+                <button class="btn btn-primary" id="savePhotoChange">Save</button>
+            </div>
+        </div>
+    </div>
     
     <div class="container">
         <main>
@@ -526,14 +728,9 @@ main {
             </section>
         </main>
     </div>
-    <footer>
-        <center>
-        <p style="color: white;">If you find bugs or glicth please contact me</p>
-         <a style="text-decoration: none; color:#4285f4;" href="mailto:Fajrulsyaban47@gmail.com">Contact me</a>
-    </footer>
 
     <script>
-     // Replace with your Firebase config
+        // Replace with your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCmIgFcDRapU6WigJSJCCgznV_cktlyAuI",
             authDomain: "my-app-e6c13.firebaseapp.com",
@@ -551,11 +748,28 @@ main {
         const currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
         let currentUserName = "User";
         let currentUserPicText = "U";
+        let currentUserPhotoUrl = "";
+        let currentUserColor = '#4285f4';
 
         // DOM elements
         const currentUserPic = document.getElementById('currentUserPic');
         const currentUsername = document.getElementById('currentUsername');
         const postUserPic = document.getElementById('postUserPic');
+        const profileMenu = document.getElementById('profileMenu');
+        const changeNameBtn = document.getElementById('changeNameBtn');
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        const nameModal = document.getElementById('nameModal');
+        const newNameInput = document.getElementById('newName');
+        const saveNameChange = document.getElementById('saveNameChange');
+        const closeNameModal = document.getElementById('closeNameModal');
+        const cancelNameChange = document.getElementById('cancelNameChange');
+        const photoModal = document.getElementById('photoModal');
+        const profilePhotoUpload = document.getElementById('profilePhotoUpload');
+        const profilePhotoPreview = document.getElementById('profilePhotoPreview');
+        const profilePhotoPreviewContainer = document.getElementById('profilePhotoPreviewContainer');
+        const savePhotoChange = document.getElementById('savePhotoChange');
+        const closePhotoModal = document.getElementById('closePhotoModal');
+        const cancelPhotoChange = document.getElementById('cancelPhotoChange');
         const postText = document.getElementById('postText');
         const postButton = document.getElementById('postButton');
         const postsContainer = document.getElementById('postsContainer');
@@ -570,13 +784,11 @@ main {
 
         // Initialize the app
         function init() {
-            // Set random user info
-            const colors = ['#4285f4', '#34a853', '#ea4335', '#fbbc05', '#673ab7'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            currentUserPic.style.backgroundColor = randomColor;
-            
-            // Prompt for username if not set
+            // Load user data from localStorage
             const storedName = localStorage.getItem('socialMediaUsername');
+            const storedPhoto = localStorage.getItem('socialMediaUserPhoto');
+            const storedColor = localStorage.getItem('socialMediaUserColor');
+            
             if (storedName) {
                 currentUserName = storedName;
                 currentUserPicText = storedName.charAt(0).toUpperCase();
@@ -589,10 +801,26 @@ main {
                 }
             }
             
-            currentUserPic.textContent = currentUserPicText;
+            if (storedPhoto) {
+                currentUserPhotoUrl = storedPhoto;
+                currentUserPic.style.backgroundImage = `url(${storedPhoto})`;
+                currentUserPic.textContent = '';
+            } else {
+                const colors = ['#4285f4', '#34a853', '#ea4335', '#fbbc05', '#673ab7'];
+                currentUserColor = storedColor || colors[Math.floor(Math.random() * colors.length)];
+                currentUserPic.style.backgroundColor = currentUserColor;
+                currentUserPic.textContent = currentUserPicText;
+            }
+            
             currentUsername.textContent = currentUserName;
             postUserPic.textContent = currentUserPicText;
-            postUserPic.style.backgroundColor = randomColor;
+            postUserPic.style.backgroundColor = currentUserColor;
+            if (currentUserPhotoUrl) {
+                postUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
+                postUserPic.textContent = '';
+            } else {
+                postUserPic.style.backgroundColor = currentUserColor;
+            }
 
             // Load posts and chat messages
             loadPosts();
@@ -604,6 +832,23 @@ main {
 
         // Set up event listeners
         function setupEventListeners() {
+            // Profile menu toggle
+            currentUserPic.addEventListener('click', toggleProfileMenu);
+            currentUsername.addEventListener('click', toggleProfileMenu);
+            
+            // Change name
+            changeNameBtn.addEventListener('click', showNameModal);
+            closeNameModal.addEventListener('click', hideNameModal);
+            cancelNameChange.addEventListener('click', hideNameModal);
+            saveNameChange.addEventListener('click', saveName);
+            
+            // Change photo
+            changePhotoBtn.addEventListener('click', showPhotoModal);
+            closePhotoModal.addEventListener('click', hidePhotoModal);
+            cancelPhotoChange.addEventListener('click', hidePhotoModal);
+            savePhotoChange.addEventListener('click', savePhoto);
+            profilePhotoUpload.addEventListener('change', handleProfilePhotoUpload);
+            
             // Post button click
             postButton.addEventListener('click', createPost);
             
@@ -628,6 +873,103 @@ main {
                     sendMessage();
                 }
             });
+            
+            // Close profile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.user-profile') && profileMenu.classList.contains('show')) {
+                    profileMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Toggle profile menu
+        function toggleProfileMenu() {
+            profileMenu.classList.toggle('show');
+        }
+
+        // Show name change modal
+        function showNameModal() {
+            profileMenu.classList.remove('show');
+            newNameInput.value = currentUserName;
+            nameModal.classList.add('show');
+        }
+
+        // Hide name change modal
+        function hideNameModal() {
+            nameModal.classList.remove('show');
+        }
+
+        // Save new name
+        function saveName() {
+            const newName = newNameInput.value.trim();
+            if (newName && newName !== currentUserName) {
+                currentUserName = newName;
+                currentUserPicText = newName.charAt(0).toUpperCase();
+                currentUsername.textContent = newName;
+                localStorage.setItem('socialMediaUsername', newName);
+                
+                // Update post user pic if no photo is set
+                if (!currentUserPhotoUrl) {
+                    postUserPic.textContent = currentUserPicText;
+                }
+                
+                hideNameModal();
+            }
+        }
+
+        // Show photo change modal
+        function showPhotoModal() {
+            profileMenu.classList.remove('show');
+            photoModal.classList.add('show');
+        }
+
+        // Hide photo change modal
+        function hidePhotoModal() {
+            photoModal.classList.remove('show');
+            profilePhotoPreviewContainer.classList.add('hidden');
+            profilePhotoUpload.value = '';
+        }
+
+        // Handle profile photo upload preview
+        function handleProfilePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    profilePhotoPreview.src = event.target.result;
+                    profilePhotoPreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Save new profile photo
+        function savePhoto() {
+            const file = profilePhotoUpload.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    currentUserPhotoUrl = event.target.result;
+                    currentUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
+                    currentUserPic.textContent = '';
+                    postUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
+                    postUserPic.textContent = '';
+                    localStorage.setItem('socialMediaUserPhoto', currentUserPhotoUrl);
+                    hidePhotoModal();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Remove profile photo
+                currentUserPhotoUrl = "";
+                currentUserPic.style.backgroundImage = '';
+                currentUserPic.style.backgroundColor = currentUserColor;
+                currentUserPic.textContent = currentUserPicText;
+                postUserPic.style.backgroundImage = '';
+                postUserPic.style.backgroundColor = currentUserColor;
+                postUserPic.textContent = currentUserPicText;
+                localStorage.removeItem('socialMediaUserPhoto');
+                hidePhotoModal();
+            }
         }
 
         // Load posts from Firestore
@@ -651,9 +993,14 @@ main {
             // Format time
             const timeAgo = getTimeAgo(post.timestamp.toDate());
             
+            // Determine if the post has a photo or just initials
+            const userDisplay = post.userPhotoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${post.userPhotoUrl}); background-color: ${post.userColor || '#4285f4'}"></div>`
+                : `<div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>`;
+            
             postElement.innerHTML = `
                 <div class="post-header">
-                    <div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>
+                    ${userDisplay}
                     <div>
                         <div class="post-user">${post.userName || 'User'}</div>
                         <div class="post-time">${timeAgo}</div>
@@ -696,7 +1043,8 @@ main {
             formData.append('image', imageFile);
             
             try {
-                const response = await fetch('https://api.imgbb.com/1/upload?key=', {
+                // Note: You need to get your own free API key from imgbb.com
+                const response = await fetch('https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY', {
                     method: 'POST',
                     body: formData
                 });
@@ -743,7 +1091,8 @@ main {
                 userId: currentUserId,
                 userName: currentUserName,
                 userPicText: currentUserPicText,
-                userColor: currentUserPic.style.backgroundColor,
+                userColor: currentUserColor,
+                userPhotoUrl: currentUserPhotoUrl || null,
                 text: text,
                 imageUrl: imageUrl,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -806,8 +1155,13 @@ main {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${isCurrentUser ? 'sent' : 'received'}`;
             
+            // Determine if the message has a photo or just initials
+            const userDisplay = message.userPhotoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${message.userPhotoUrl}); background-color: ${message.userColor || '#4285f4'}"></div>`
+                : `<div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}">${message.userPicText || 'U'}</div>`;
+            
             messageElement.innerHTML = `
-                <div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}">${message.userPicText || 'U'}</div>
+                ${userDisplay}
                 <div class="message-content">
                     ${!isCurrentUser ? `<div class="message-user">${message.userName || 'User'}</div>` : ''}
                     <div>${message.text}</div>
@@ -832,7 +1186,8 @@ main {
                 userId: currentUserId,
                 userName: currentUserName,
                 userPicText: currentUserPicText,
-                userColor: currentUserPic.style.backgroundColor,
+                userColor: currentUserColor,
+                userPhotoUrl: currentUserPhotoUrl || null,
                 text: text,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
