@@ -36,41 +36,51 @@
             background-color: var(--light-gray);
             color: var(--dark-gray);
             line-height: 1.6;
-            min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
         }
 
-        /* Header Styles */
-        header {
+        /* Header styles */
+        .header {
             background-color: var(--white);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 1rem;
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-
-        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: bold;
             color: var(--primary-color);
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
             position: relative;
         }
 
@@ -78,34 +88,29 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            object-fit: cover;
-            background-color: var(--medium-gray);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: white;
             font-weight: bold;
-            flex-shrink: 0;
-            cursor: pointer;
             background-size: cover;
             background-position: center;
         }
 
         .username {
-            font-weight: 500;
-            cursor: pointer;
+            font-weight: 600;
         }
 
         .profile-menu {
             position: absolute;
             top: 100%;
-            right: 0;
+            left: 0;
             background-color: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
-            padding: 0.5rem;
+            padding: 10px 0;
             width: 200px;
-            z-index: 1000;
+            z-index: 10;
             display: none;
         }
 
@@ -114,188 +119,61 @@
         }
 
         .profile-menu-item {
-            padding: 0.5rem;
+            padding: 8px 15px;
             cursor: pointer;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            transition: var(--transition);
         }
 
         .profile-menu-item:hover {
             background-color: var(--light-gray);
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--medium-gray);
-        }
-
-        .modal-body {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-secondary {
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e0e0e0;
-        }
-
-        /* Main Content Layout */
-        main {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            padding: 1rem 0;
-        }
-
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-
-        /* Posts Section */
-        .posts-section {
+        /* Main content styles */
+        .main-content {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 20px;
         }
 
-        .create-post {
+        /* Post creator styles */
+        .post-creator {
             background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: 1rem;
+            padding: 15px;
             box-shadow: var(--shadow);
         }
 
-        .post-form {
+        .post-creator-header {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .post-input {
-            display: flex;
-            gap: 0.5rem;
-            align-items: flex-start;
-        }
-
-        .post-input textarea {
-            flex: 1;
+            width: 100%;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-round);
-            padding: 0.75rem 1rem;
+            padding: 10px 15px;
             resize: none;
-            min-height: 50px;
-            font-size: 1rem;
-            transition: var(--transition);
+            min-height: 80px;
+            margin-bottom: 10px;
         }
 
-        .post-input textarea:focus {
+        .post-input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        .post-creator-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .post-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
         }
 
         .action-button {
@@ -305,24 +183,25 @@
             color: var(--medium-gray);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 4px;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: var(--border-radius-round);
             transition: var(--transition);
         }
 
         .action-button:hover {
             background-color: var(--light-gray);
+            color: var(--dark-gray);
         }
 
         .post-button {
             background-color: var(--primary-color);
-            color: var(--white);
+            color: white;
             border: none;
-            padding: 0.5rem 1.25rem;
+            padding: 8px 20px;
             border-radius: var(--border-radius-round);
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
             transition: var(--transition);
         }
 
@@ -335,189 +214,36 @@
             cursor: not-allowed;
         }
 
-        /* Posts List */
-        .post {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: var(--shadow);
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .post-user {
-            font-weight: 500;
-        }
-
-        .post-time {
-            color: var(--medium-gray);
-            font-size: 0.8rem;
-        }
-
-        .post-content {
-            margin: 0.75rem 0;
-            white-space: pre-line;
-            word-break: break-word;
-        }
-
-        .post-image {
-            width: 100%;
-            border-radius: var(--border-radius);
-            margin: 0.75rem 0;
-            max-height: 500px;
-            object-fit: contain;
-            background-color: var(--light-gray);
-        }
-
-        .post-actions-bar {
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid var(--border-color);
-            padding-top: 0.75rem;
-            margin-top: 0.75rem;
-        }
-
-        /* Chat Section */
-        .chat-section {
-            position: sticky;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            height: 600px;
-        }
-
-        .chat-header {
-            font-weight: 500;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1rem;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding-right: 0.5rem;
-        }
-
-        .message {
-            display: flex;
-            gap: 0.75rem;
-            max-width: 90%;
-        }
-
-        .message.received {
-            align-self: flex-start;
-        }
-
-        .message.sent {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message-content {
-            max-width: 100%;
-        }
-
-        .message.received .message-content {
-            background-color: var(--light-gray);
-            border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
-            padding: 0.75rem;
-            word-break: break-word;
-        }
-
-        .message.sent .message-content {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
-            padding: 0.75rem;
-            word-break: break-word;
-        }
-
-        .message-user {
-            font-weight: 500;
-            font-size: 0.8rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .chat-input input {
-            flex: 1;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-round);
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .chat-input input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
-        }
-
-        .send-button {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .send-button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* Image Preview */
-        #imagePreviewContainer {
-            display: none;
-            margin-top: 0.75rem;
+        .image-preview-container {
             position: relative;
+            margin-top: 10px;
+            display: none;
         }
 
-        #imagePreviewContainer.show {
-            display: block;
+        .image-preview-container.hidden {
+            display: none;
         }
 
-        #imagePreview {
+        .image-preview {
             max-width: 100%;
             max-height: 300px;
             border-radius: var(--border-radius);
-            display: block;
-            margin-bottom: 0.5rem;
         }
 
         .remove-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background-color: var(--accent-color);
-            color: var(--white);
+            color: white;
             border: none;
-            padding: 0.35rem 0.75rem;
-            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-size: 0.8rem;
             transition: var(--transition);
         }
 
@@ -525,14 +251,255 @@
             background-color: var(--accent-hover);
         }
 
-        /* Loading Indicator */
+        /* Posts styles */
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .post {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post-user {
+            font-weight: 600;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .post-content {
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+        }
+
+        .post-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+
+        /* Chat styles */
+        .chat-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.received {
+            align-self: flex-start;
+        }
+
+        .message-content {
+            background-color: var(--light-gray);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+        }
+
+        .message.sent .message-content {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+
+        .message.received .message-content {
+            border-bottom-left-radius: 0;
+        }
+
+        .message-user {
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-round);
+            padding: 10px 15px;
+            resize: none;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .send-message-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: var(--border-radius-round);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .send-message-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .send-message-button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-input {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-button {
+            padding: 8px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .modal-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .modal-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .modal-button.secondary {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            border: none;
+        }
+
+        .modal-button.secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--medium-gray);
+        }
+
+        /* Loading spinner */
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: var(--white);
+            border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -540,205 +507,168 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Scrollbar Styles */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Message actions */
+        .message-actions {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            z-index: 10;
+            padding: 5px 0;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--light-gray);
-            border-radius: 4px;
+        .message:hover .message-actions {
+            display: block;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--medium-gray);
-            border-radius: 4px;
+        .message-action {
+            padding: 5px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--dark-gray);
+        .message-action:hover {
+            background-color: var(--light-gray);
         }
 
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
+        /* Reply indicator */
+        .reply-indicator {
+            background-color: var(--light-gray);
+            padding: 8px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--medium-gray);
+            display: none;
         }
 
-        .show {
-            display: block !important;
+        .reply-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .post-actions {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: flex-end;
-            }
-            
-            .post-actions-bar {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-            
-            .post-actions-bar .action-button {
-                padding: 0.25rem;
-            }
-            
-            .chat-section {
-                height: 400px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-content {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-            
-            .post-input {
-                flex-direction: column;
-            }
-            
-            .post-input textarea {
-                width: 100%;
-            }
+        .cancel-reply {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Hello!</div>
-                <div class="user-profile">
-                    <div class="profile-pic" id="currentUserPic">U</div>
-                    <span class="username" id="currentUsername">User</span>
-                    <div class="profile-menu" id="profileMenu">
-                        <div class="profile-menu-item" id="changeNameBtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                            </svg>
-                            Change Name
-                        </div>
-                        <div class="profile-menu-item" id="changePhotoBtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="header">
+        <div class="logo">Hello!</div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="profile-pic" id="currentUserPic"></div>
+                <div class="username" id="currentUsername">User</div>
+                
+                <div class="profile-menu" id="profileMenu">
+                    <div class="profile-menu-item" id="changeNameBtn">Change Name</div>
+                    <div class="profile-menu-item" id="changePhotoBtn">Change Photo</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="post-creator">
+                <div class="post-creator-header">
+                    <div class="profile-pic" id="postUserPic"></div>
+                    <div>What's on your mind?</div>
+                </div>
+                
+                <textarea class="post-input" id="postText" placeholder="Share your thoughts..."></textarea>
+                
+                <div class="image-preview-container hidden" id="imagePreviewContainer">
+                    <img src="" class="image-preview" id="imagePreview" alt="Preview">
+                    <button class="remove-image" id="removeImage">×</button>
+                </div>
+                
+                <div class="post-creator-footer">
+                    <div class="post-actions">
+                        <button class="action-button" id="addPhotoBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                 <polyline points="21 15 16 10 5 21"></polyline>
                             </svg>
-                            Change Photo
-                        </div>
+                            Photo
+                        </button>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
                     </div>
+                    <button class="post-button" id="postButton">Post</button>
                 </div>
             </div>
-        </div>
-    </header>
-    
-    <!-- Change Name Modal -->
-    <div class="modal" id="nameModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Change Your Name</div>
-                <button class="close-modal" id="closeNameModal">&times;</button>
+            
+            <div class="posts-container" id="postsContainer">
+                <!-- Posts will be loaded here -->
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="newName">New Name</label>
-                    <input type="text" id="newName" class="form-control" placeholder="Enter your new name">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelNameChange">Cancel</button>
-                <button class="btn btn-primary" id="saveNameChange">Save</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Change Photo Modal -->
-    <div class="modal" id="photoModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Change Your Profile Photo</div>
-                <button class="close-modal" id="closePhotoModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="profilePhotoUpload">Upload Photo</label>
-                    <input type="file" id="profilePhotoUpload" accept="image/*" class="form-control">
-                </div>
-                <div id="profilePhotoPreviewContainer" class="hidden">
-                    <img id="profilePhotoPreview" src="#" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: var(--border-radius); margin-top: 1rem;">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelPhotoChange">Cancel</button>
-                <button class="btn btn-primary" id="savePhotoChange">Save</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <main>
-            <section class="posts-section">
-                <div class="create-post">
-                    <div class="post-form">
-                        <div class="post-input">
-                            <div class="profile-pic" id="postUserPic">U</div>
-                            <textarea id="postText" placeholder="What's on your mind?"></textarea>
-                        </div>
-                        <div id="imagePreviewContainer" class="hidden">
-                            <img id="imagePreview" src="#" alt="Preview">
-                            <button class="remove-image" id="removeImage">Remove Image</button>
-                        </div>
-                        <div class="post-actions">
-                            <div>
-                                <button class="action-button" id="addPhotoBtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                        <polyline points="21 15 16 10 5 21"></polyline>
-                                    </svg>
-                                    Photo
-                                </button>
-                                <input type="file" id="imageUpload" accept="image/*" class="hidden">
-                            </div>
-                            <button class="post-button" id="postButton">Post</button>
-                        </div>
+            
+            <div class="chat-container">
+                <div class="reply-indicator" id="replyIndicator">
+                    <div class="reply-info">
+                        <span>Replying to <span id="replyingToName"></span></span>
+                        <button class="cancel-reply" id="cancelReply">Cancel</button>
                     </div>
                 </div>
                 
-                <div id="postsContainer"></div>
-            </section>
-            
-            <section class="chat-section">
-                <h3 class="chat-header">Chat</h3>
                 <div class="chat-messages" id="chatMessages">
-                    <!-- Messages will appear here -->
+                    <!-- Chat messages will be loaded here -->
                 </div>
-                <div class="chat-input">
-                    <input type="text" id="chatInput" placeholder="Type a message...">
-                    <button class="send-button" id="sendMessageBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
+                    <button class="send-message-button" id="sendMessageBtn">Send</button>
                 </div>
-            </section>
-        </main>
+            </div>
+        </div>
     </div>
-    <center>
-     <a href="mailto:Fajrulsyaban47@gmail.com">Tanya Rizfan!</a>
-
+    
+    <!-- Name Change Modal -->
+    <div class="modal" id="nameModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeNameModal">×</button>
+            <div class="modal-title">Change Your Name</div>
+            <input type="text" class="modal-input" id="newName" placeholder="Enter your new name">
+            <div class="modal-buttons">
+                <button class="modal-button secondary" id="cancelNameChange">Cancel</button>
+                <button class="modal-button primary" id="saveNameChange">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Photo Change Modal -->
+    <div class="modal" id="photoModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closePhotoModal">×</button>
+            <div class="modal-title">Change Your Profile Photo</div>
+            <input type="file" class="modal-input" id="profilePhotoUpload" accept="image/*">
+            
+            <div class="image-preview-container hidden" id="profilePhotoPreviewContainer">
+                <img src="" class="image-preview" id="profilePhotoPreview" alt="Preview">
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-button secondary" id="cancelPhotoChange">Cancel</button>
+                <button class="modal-button primary" id="savePhotoChange">Save</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // Replace with your Firebase config
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCmIgFcDRapU6WigJSJCCgznV_cktlyAuI",
             authDomain: "my-app-e6c13.firebaseapp.com",
             projectId: "my-app-e6c13",
-            storageBucket: "",
+            storageBucket: "my-app-e6c13.appspot.com",
             messagingSenderId: "91681597709",
             appId: "1:91681597709:web:c1d4673df4fe48431d2844"
         };
@@ -784,10 +714,24 @@
         const chatMessagesContainer = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const replyIndicator = document.getElementById('replyIndicator');
+        const replyingToName = document.getElementById('replyingToName');
+        const cancelReply = document.getElementById('cancelReply');
+
+        // Chat reply state
+        let replyingToMessageId = null;
+        let replyingToUserName = null;
 
         // Initialize the app
         function init() {
-            // Load user data from localStorage
+            loadUserData();
+            setupEventListeners();
+            loadPosts();
+            loadChatMessages();
+        }
+
+        // Load user data from localStorage
+        function loadUserData() {
             const storedName = localStorage.getItem('socialMediaUsername');
             const storedPhoto = localStorage.getItem('socialMediaUserPhoto');
             const storedColor = localStorage.getItem('socialMediaUserColor');
@@ -796,41 +740,57 @@
                 currentUserName = storedName;
                 currentUserPicText = storedName.charAt(0).toUpperCase();
             } else {
-                const name = prompt("Enter your name to get started:", "User");
-                if (name) {
-                    currentUserName = name;
-                    currentUserPicText = name.charAt(0).toUpperCase();
-                    localStorage.setItem('socialMediaUsername', name);
-                }
+                const name = prompt("Enter your name to get started:", "User") || "User";
+                currentUserName = name;
+                currentUserPicText = name.charAt(0).toUpperCase();
+                localStorage.setItem('socialMediaUsername', name);
             }
             
             if (storedPhoto) {
                 currentUserPhotoUrl = storedPhoto;
-                currentUserPic.style.backgroundImage = `url(${storedPhoto})`;
-                currentUserPic.textContent = '';
+                updateProfilePicture(currentUserPhotoUrl);
             } else {
                 const colors = ['#4285f4', '#34a853', '#ea4335', '#fbbc05', '#673ab7'];
                 currentUserColor = storedColor || colors[Math.floor(Math.random() * colors.length)];
-                currentUserPic.style.backgroundColor = currentUserColor;
-                currentUserPic.textContent = currentUserPicText;
+                localStorage.setItem('socialMediaUserColor', currentUserColor);
+                updateProfileInitials();
             }
             
             currentUsername.textContent = currentUserName;
+            updatePostUserDisplay();
+        }
+
+        // Update profile picture display
+        function updateProfilePicture(url) {
+            currentUserPic.style.backgroundImage = `url(${url})`;
+            currentUserPic.textContent = '';
+            currentUserPic.style.backgroundColor = 'transparent';
+            postUserPic.style.backgroundImage = `url(${url})`;
+            postUserPic.textContent = '';
+            postUserPic.style.backgroundColor = 'transparent';
+        }
+
+        // Update profile initials display
+        function updateProfileInitials() {
+            currentUserPic.style.backgroundImage = '';
+            currentUserPic.textContent = currentUserPicText;
+            currentUserPic.style.backgroundColor = currentUserColor;
+            postUserPic.style.backgroundImage = '';
             postUserPic.textContent = currentUserPicText;
             postUserPic.style.backgroundColor = currentUserColor;
+        }
+
+        // Update post user display
+        function updatePostUserDisplay() {
             if (currentUserPhotoUrl) {
                 postUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
                 postUserPic.textContent = '';
+                postUserPic.style.backgroundColor = 'transparent';
             } else {
+                postUserPic.style.backgroundImage = '';
+                postUserPic.textContent = currentUserPicText;
                 postUserPic.style.backgroundColor = currentUserColor;
             }
-
-            // Load posts and chat messages
-            loadPosts();
-            loadChatMessages();
-            
-            // Set up event listeners
-            setupEventListeners();
         }
 
         // Set up event listeners
@@ -883,6 +843,9 @@
                     profileMenu.classList.remove('show');
                 }
             });
+            
+            // Cancel reply
+            cancelReply.addEventListener('click', cancelMessageReply);
         }
 
         // Toggle profile menu
@@ -911,9 +874,9 @@
                 currentUsername.textContent = newName;
                 localStorage.setItem('socialMediaUsername', newName);
                 
-                // Update post user pic if no photo is set
+                // Update display if no photo is set
                 if (!currentUserPhotoUrl) {
-                    postUserPic.textContent = currentUserPicText;
+                    updateProfileInitials();
                 }
                 
                 hideNameModal();
@@ -923,55 +886,93 @@
         // Show photo change modal
         function showPhotoModal() {
             profileMenu.classList.remove('show');
+            profilePhotoPreviewContainer.classList.add('hidden');
+            profilePhotoUpload.value = '';
             photoModal.classList.add('show');
         }
 
         // Hide photo change modal
         function hidePhotoModal() {
             photoModal.classList.remove('show');
-            profilePhotoPreviewContainer.classList.add('hidden');
-            profilePhotoUpload.value = '';
         }
 
         // Handle profile photo upload preview
         function handleProfilePhotoUpload(e) {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    profilePhotoPreview.src = event.target.result;
-                    profilePhotoPreviewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPEG, PNG, GIF)');
+                profilePhotoUpload.value = '';
+                return;
             }
+
+            // Validate file size (max 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                alert('Image size must be less than 5MB');
+                profilePhotoUpload.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onloadstart = () => {
+                profilePhotoPreviewContainer.classList.add('hidden');
+                savePhotoChange.disabled = true;
+                savePhotoChange.innerHTML = '<span class="loading"></span> Processing...';
+            };
+            reader.onload = (event) => {
+                profilePhotoPreview.src = event.target.result;
+                profilePhotoPreviewContainer.classList.remove('hidden');
+                savePhotoChange.disabled = false;
+                savePhotoChange.textContent = 'Save';
+            };
+            reader.onerror = () => {
+                alert('Error reading image file. Please try another image.');
+                profilePhotoUpload.value = '';
+                savePhotoChange.disabled = false;
+                savePhotoChange.textContent = 'Save';
+            };
+            reader.readAsDataURL(file);
         }
 
         // Save new profile photo
-        function savePhoto() {
+        async function savePhoto() {
             const file = profilePhotoUpload.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    currentUserPhotoUrl = event.target.result;
-                    currentUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
-                    currentUserPic.textContent = '';
-                    postUserPic.style.backgroundImage = `url(${currentUserPhotoUrl})`;
-                    postUserPic.textContent = '';
+            
+            try {
+                if (file) {
+                    // Show loading state
+                    savePhotoChange.disabled = true;
+                    savePhotoChange.innerHTML = '<span class="loading"></span> Saving...';
+                    
+                    // Convert to base64 for localStorage
+                    const base64String = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+
+                    currentUserPhotoUrl = base64String;
+                    updateProfilePicture(currentUserPhotoUrl);
                     localStorage.setItem('socialMediaUserPhoto', currentUserPhotoUrl);
-                    hidePhotoModal();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Remove profile photo
-                currentUserPhotoUrl = "";
-                currentUserPic.style.backgroundImage = '';
-                currentUserPic.style.backgroundColor = currentUserColor;
-                currentUserPic.textContent = currentUserPicText;
-                postUserPic.style.backgroundImage = '';
-                postUserPic.style.backgroundColor = currentUserColor;
-                postUserPic.textContent = currentUserPicText;
-                localStorage.removeItem('socialMediaUserPhoto');
+                } else {
+                    // Remove profile photo
+                    currentUserPhotoUrl = "";
+                    updateProfileInitials();
+                    localStorage.removeItem('socialMediaUserPhoto');
+                }
+                
                 hidePhotoModal();
+            } catch (error) {
+                console.error("Error saving profile photo:", error);
+                alert("Error saving profile photo. Please try again.");
+            } finally {
+                savePhotoChange.disabled = false;
+                savePhotoChange.textContent = 'Save';
             }
         }
 
@@ -983,8 +984,12 @@
                     postsContainer.innerHTML = '';
                     snapshot.forEach((doc) => {
                         const post = doc.data();
+                        post.id = doc.id; // Add the document ID to the post object
                         renderPost(post);
                     });
+                }, (error) => {
+                    console.error("Error loading posts:", error);
+                    alert("Error loading posts. Please refresh the page.");
                 });
         }
 
@@ -1010,7 +1015,7 @@
                     </div>
                 </div>
                 <div class="post-content">${post.text}</div>
-                ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
+                ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image" onerror="this.style.display='none'">` : ''}
                 <div class="post-actions-bar">
                     <button class="action-button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1042,15 +1047,35 @@
 
         // Upload image to ImgBB (free service)
         async function uploadImageToImgBB(imageFile) {
+            if (!imageFile) return null;
+            
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(imageFile.type)) {
+                alert('Please select a valid image file (JPEG, PNG, GIF)');
+                return null;
+            }
+
+            // Validate file size (max 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (imageFile.size > maxSize) {
+                alert('Image size must be less than 5MB');
+                return null;
+            }
+
             const formData = new FormData();
             formData.append('image', imageFile);
             
             try {
                 // Note: You need to get your own free API key from imgbb.com
-                const response = await fetch('https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY', {
+                const response = await fetch('https://api.imgbb.com/1/upload?key=cb4fd06a940b689c1374b73b95ff39e8', {
                     method: 'POST',
                     body: formData
                 });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 
                 const data = await response.json();
                 if (data.success) {
@@ -1060,6 +1085,7 @@
                 }
             } catch (error) {
                 console.error("Error uploading image:", error);
+                alert("Error uploading image. Please try again.");
                 return null;
             }
         }
@@ -1069,7 +1095,10 @@
             const text = postText.value.trim();
             const imageFile = imageUpload.files[0];
             
-            if (!text && !imageFile) return;
+            if (!text && !imageFile) {
+                alert("Please enter some text or select an image to post");
+                return;
+            }
             
             // Show loading state
             const originalButtonText = postButton.textContent;
@@ -1080,9 +1109,15 @@
             
             // If there's an image, upload it to ImgBB
             if (imageFile) {
-                imageUrl = await uploadImageToImgBB(imageFile);
-                if (!imageUrl) {
-                    alert("Failed to upload image. Please try again.");
+                try {
+                    imageUrl = await uploadImageToImgBB(imageFile);
+                    if (!imageUrl) {
+                        postButton.textContent = originalButtonText;
+                        postButton.disabled = false;
+                        return;
+                    }
+                } catch (error) {
+                    console.error("Error uploading image:", error);
                     postButton.textContent = originalButtonText;
                     postButton.disabled = false;
                     return;
@@ -1118,23 +1153,37 @@
             }
         }
 
-        // Handle image upload
+        // Handle image upload preview for posts
         function handleImageUpload(e) {
             const file = e.target.files[0];
-            if (file) {
-                // Validate file size (ImgBB has 32MB limit)
-                if (file.size > 32 * 1024 * 1024) {
-                    alert("Image is too large. Maximum size is 32MB.");
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagePreview.src = event.target.result;
-                    imagePreviewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPEG, PNG, GIF)');
+                imageUpload.value = '';
+                return;
             }
+
+            // Validate file size (max 5MB)
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                alert('Image size must be less than 5MB');
+                imageUpload.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+                imagePreviewContainer.classList.remove('hidden');
+            };
+            reader.onerror = function() {
+                alert('Error reading image file. Please try another image.');
+                imageUpload.value = '';
+            };
+            reader.readAsDataURL(file);
         }
 
         // Load chat messages from Firestore
@@ -1145,10 +1194,14 @@
                     chatMessagesContainer.innerHTML = '';
                     snapshot.forEach((doc) => {
                         const message = doc.data();
+                        message.id = doc.id; // Add document ID to message
                         renderMessage(message);
                     });
                     // Scroll to bottom
                     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                }, (error) => {
+                    console.error("Error loading messages:", error);
+                    alert("Error loading messages. Please refresh the page.");
                 });
         }
 
@@ -1163,21 +1216,78 @@
                 ? `<div class="profile-pic" style="background-image: url(${message.userPhotoUrl}); background-color: ${message.userColor || '#4285f4'}"></div>`
                 : `<div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}">${message.userPicText || 'U'}</div>`;
             
+            // Check if this is a reply
+            const replyInfo = message.replyToMessageId ? `
+                <div style="font-size:12px;color:#777;margin-bottom:5px;">
+                    Replying to ${message.replyToUserName || 'User'}
+                </div>
+            ` : '';
+            
             messageElement.innerHTML = `
                 ${userDisplay}
                 <div class="message-content">
                     ${!isCurrentUser ? `<div class="message-user">${message.userName || 'User'}</div>` : ''}
+                    ${replyInfo}
                     <div>${message.text}</div>
+                    <div style="margin-top:5px;display:flex;gap:10px;">
+                        <span style="font-size:12px;color:#777;cursor:pointer;" class="reply-btn" 
+                              data-message-id="${message.id}" 
+                              data-user-name="${message.userName}">
+                            Reply
+                        </span>
+                        ${isCurrentUser ? `
+                        <span style="font-size:12px;color:#777;cursor:pointer;" class="delete-btn" 
+                              data-message-id="${message.id}">
+                            Delete
+                        </span>
+                        ` : ''}
+                    </div>
                 </div>
             `;
             
+            // Add event listeners
+            const replyBtn = messageElement.querySelector('.reply-btn');
+            const deleteBtn = messageElement.querySelector('.delete-btn');
+            
+            if (replyBtn) {
+                replyBtn.addEventListener('click', (e) => {
+                    replyingToMessageId = e.target.dataset.messageId;
+                    replyingToUserName = e.target.dataset.userName;
+                    replyingToName.textContent = replyingToUserName || 'User';
+                    replyIndicator.style.display = 'block';
+                    chatInput.focus();
+                });
+            }
+            
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', (e) => {
+                    if (confirm("Are you sure you want to delete this message?")) {
+                        db.collection("messages").doc(e.target.dataset.messageId).delete()
+                            .catch(error => {
+                                console.error("Error deleting message:", error);
+                                alert("Error deleting message. Please try again.");
+                            });
+                    }
+                });
+            }
+            
             chatMessagesContainer.appendChild(messageElement);
+        }
+
+        // Cancel message reply
+        function cancelMessageReply() {
+            replyingToMessageId = null;
+            replyingToUserName = null;
+            replyIndicator.style.display = 'none';
         }
 
         // Send a chat message
         async function sendMessage() {
             const text = chatInput.value.trim();
-            if (!text) return;
+            if (!text) {
+                alert("Please enter a message");
+                return;
+            }
             
             // Show loading state
             const originalButtonText = sendMessageBtn.innerHTML;
@@ -1195,10 +1305,17 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
             
+            // Add reply info if this is a reply
+            if (replyingToMessageId) {
+                newMessage.replyToMessageId = replyingToMessageId;
+                newMessage.replyToUserName = replyingToUserName;
+            }
+            
             // Add to Firestore
             try {
                 await db.collection("messages").add(newMessage);
                 chatInput.value = '';
+                cancelMessageReply();
             } catch (error) {
                 console.error("Error sending message:", error);
                 alert("Error sending message. Please try again.");
