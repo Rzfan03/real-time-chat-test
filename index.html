@@ -4,347 +4,466 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Social Media</title>
-    <!-- Add Firebase SDKs -->
+    <!-- Firebase SDKs (Firestore only) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <style>
-        :root {
-            --primary-color: #4285f4;
-            --secondary-color: #34a853;
-            --accent-color: #ea4335;
-            --light-gray: #f5f5f5;
-            --dark-gray: #333;
-            --medium-gray: #757575;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light-gray);
-            color: var(--dark-gray);
-            line-height: 1.6;
-        }
-        
-        header {
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: var(--medium-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .username {
-            font-weight: 500;
-        }
-        
-        main {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            padding: 1rem 0;
-        }
-        
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-        
-        .posts-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .create-post {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .post-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .post-input {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        
-        .post-input textarea {
-            flex: 1;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            padding: 0.75rem 1rem;
-            resize: none;
-            min-height: 50px;
-            font-size: 1rem;
-        }
-        
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .action-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--medium-gray);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 4px;
-        }
-        
-        .action-button:hover {
-            background-color: var(--light-gray);
-        }
-        
-        .post-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .post-button:hover {
-            background-color: #3367d6;
-        }
-        
-        .post {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .post-user {
-            font-weight: 500;
-        }
-        
-        .post-time {
-            color: var(--medium-gray);
-            font-size: 0.8rem;
-        }
-        
-        .post-content {
-            margin: 0.5rem 0;
-        }
-        
-        .post-image {
-            width: 100%;
-            border-radius: 8px;
-            margin: 0.5rem 0;
-            max-height: 500px;
-            object-fit: cover;
-        }
-        
-        .post-actions-bar {
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid #eee;
-            padding-top: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .chat-section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            height: 600px;
-        }
-        
-        .chat-header {
-            font-weight: 500;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 1rem;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding-right: 0.5rem;
-        }
-        
-        .message {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .message.received {
-            align-self: flex-start;
-        }
-        
-        .message.sent {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-        
-        .message-content {
-            max-width: 70%;
-        }
-        
-        .message.received .message-content {
-            background-color: var(--light-gray);
-            border-radius: 0 12px 12px 12px;
-            padding: 0.75rem;
-        }
-        
-        .message.sent .message-content {
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 12px 0 12px 12px;
-            padding: 0.75rem;
-        }
-        
-        .message-user {
-            font-weight: 500;
-            font-size: 0.8rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .chat-input {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-        }
-        
-        .send-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .send-button:hover {
-            background-color: #3367d6;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        #imagePreview {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-        }
-        
-        .remove-image {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        
-        .remove-image:hover {
-            background-color: #d33426;
-        }
+      :root {
+    --primary-color: #4285f4;
+    --primary-hover: #3367d6;
+    --secondary-color: #34a853;
+    --accent-color: #ea4335;
+    --accent-hover: #d33426;
+    --light-gray: #f5f5f5;
+    --medium-gray: #757575;
+    --dark-gray: #333;
+    --white: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --border-radius: 8px;
+    --border-radius-round: 20px;
+    --transition: all 0.3s ease;
+}
 
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+body {
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--medium-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.username {
+    font-weight: 500;
+}
+
+/* Main Content Layout */
+main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+@media (min-width: 768px) {
+    main {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+/* Posts Section */
+.posts-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.create-post {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.post-input {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.post-input textarea {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-round);
+    padding: 0.75rem 1rem;
+    resize: none;
+    min-height: 50px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.post-input textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--medium-gray);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.action-button:hover {
+    background-color: var(--light-gray);
+}
+
+.post-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--border-radius-round);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.post-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.post-button:disabled {
+    background-color: var(--medium-gray);
+    cursor: not-allowed;
+}
+
+/* Posts List */
+.post {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.post-user {
+    font-weight: 500;
+}
+
+.post-time {
+    color: var(--medium-gray);
+    font-size: 0.8rem;
+}
+
+.post-content {
+    margin: 0.75rem 0;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.post-image {
+    width: 100%;
+    border-radius: var(--border-radius);
+    margin: 0.75rem 0;
+    max-height: 500px;
+    object-fit: contain;
+    background-color: var(--light-gray);
+}
+
+.post-actions-bar {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+/* Chat Section */
+.chat-section {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.chat-header {
+    font-weight: 500;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-right: 0.5rem;
+}
+
+.message {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 90%;
+}
+
+.message.received {
+    align-self: flex-start;
+}
+
+.message.sent {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-content {
+    max-width: 100%;
+}
+
+.message.received .message-content {
+    background-color: var(--light-gray);
+    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+    padding: 0.75rem;
+    word-break: break-word;
+}
+
+.message.sent .message-content {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+    padding: 0.75rem;
+    word-break: break-word;
+}
+
+.message-user {
+    font-weight: 500;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-input input {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-round);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.chat-input input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.send-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.send-button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Image Preview */
+#imagePreviewContainer {
+    display: none;
+    margin-top: 0.75rem;
+    position: relative;
+}
+
+#imagePreviewContainer.show {
+    display: block;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: var(--border-radius);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.remove-image {
+    background-color: var(--accent-color);
+    color: var(--white);
+    border: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.remove-image:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Loading Indicator */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: var(--white);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--medium-gray);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-gray);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .post-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+    
+    .post-actions-bar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .post-actions-bar .action-button {
+        padding: 0.25rem;
+    }
+    
+    .chat-section {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .post-input {
+        flex-direction: column;
+    }
+    
+    .post-input textarea {
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
+    <!-- [HTML structure remains exactly the same] -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -409,19 +528,19 @@
     </div>
 
     <script>
-        // Replace with your Firebase config
+        // Firebase config (Firestore only)
         const firebaseConfig = {
             apiKey: "AIzaSyCmIgFcDRapU6WigJSJCCgznV_cktlyAuI",
             authDomain: "my-app-e6c13.firebaseapp.com",
             projectId: "my-app-e6c13",
+            storageBucket: "", // We're not using Firebase Storage
             messagingSenderId: "91681597709",
             appId: "1:91681597709:web:c1d4673df4fe48431d2844"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase (Firestore only)
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const storage = firebase.storage();
 
         // Generate a random user ID for the current session
         const currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
@@ -566,7 +685,7 @@
             postsContainer.appendChild(postElement);
         }
 
-       // Upload image to ImgBB (free service)
+        // Upload image to ImgBB (free service)
         async function uploadImageToImgBB(imageFile) {
             const formData = new FormData();
             formData.append('image', imageFile);
@@ -603,15 +722,11 @@
 
             let imageUrl = '';
             
-            // If there's an image, upload it to Firebase Storage
+            // If there's an image, upload it to ImgBB
             if (imageFile) {
-                try {
-                    const storageRef = storage.ref();
-                    const fileRef = storageRef.child(`posts/${currentUserId}_${Date.now()}`);
-                    const snapshot = await fileRef.put(imageFile);
-                    imageUrl = await snapshot.ref.getDownloadURL();
-                } catch (error) {
-                    console.error("Error uploading image:", error);
+                imageUrl = await uploadImageToImgBB(imageFile);
+                if (!imageUrl) {
+                    alert("Failed to upload image. Please try again.");
                     postButton.textContent = originalButtonText;
                     postButton.disabled = false;
                     return;
@@ -639,6 +754,7 @@
                 imageUpload.value = '';
             } catch (error) {
                 console.error("Error adding post:", error);
+                alert("Error creating post. Please try again.");
             } finally {
                 postButton.textContent = originalButtonText;
                 postButton.disabled = false;
@@ -663,6 +779,7 @@
                 reader.readAsDataURL(file);
             }
         }
+
         // Load chat messages from Firestore
         function loadChatMessages() {
             db.collection("messages")
@@ -721,6 +838,7 @@
                 chatInput.value = '';
             } catch (error) {
                 console.error("Error sending message:", error);
+                alert("Error sending message. Please try again.");
             } finally {
                 sendMessageBtn.innerHTML = originalButtonText;
                 sendMessageBtn.disabled = false;
