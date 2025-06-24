@@ -85,6 +85,7 @@
             margin-right: 10px;
             background-size: cover;
             background-position: center;
+            cursor: pointer;
         }
 
         .profile-name {
@@ -811,6 +812,90 @@
             font-size: 14px;
         }
 
+        /* User profile view styles */
+        .user-profile-container {
+            display: none;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .user-profile-status {
+            font-size: 14px;
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .user-profile-actions {
+            margin-top: 10px;
+        }
+
+        .user-profile-action-btn {
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .user-profile-action-btn.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .user-profile-action-btn.secondary {
+            background-color: var(--light-gray);
+            color: var(--black);
+            margin-left: 10px;
+        }
+
+        .user-posts-title {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .user-posts-container {
+            margin-top: 15px;
+        }
+
         /* Empty state styles */
         .empty-state {
             text-align: center;
@@ -943,8 +1028,10 @@
 
             .users-list-container,
             .friends-list-container,
-            .friend-requests-container {
+            .friend-requests-container,
+            .user-profile-container {
                 height: calc(100vh - 100px);
+                overflow-y: auto;
             }
         }
     </style>
@@ -1121,6 +1208,20 @@
                 </div>
                 <button class="profile-save-btn" id="profile-save-btn">Save Changes</button>
             </div>
+            
+            <!-- User Profile View -->
+            <div class="user-profile-container" id="user-profile-view">
+                <div class="user-profile-header">
+                    <div class="user-profile-pic" id="user-profile-pic"></div>
+                    <div class="user-profile-info">
+                        <div class="user-profile-name" id="user-profile-name"></div>
+                        <div class="user-profile-status" id="user-profile-status"></div>
+                        <div class="user-profile-actions" id="user-profile-actions"></div>
+                    </div>
+                </div>
+                <h3 class="user-posts-title">Posts</h3>
+                <div class="user-posts-container" id="user-posts-container"></div>
+            </div>
         </div>
     </div>
     
@@ -1148,6 +1249,7 @@
         let pendingFriendRequestsCount = 0;
         let onlineUsers = {};
         let userStatusInterval;
+        let currentViewingUserId = null;
 
         // DOM Elements
         const homeView = document.getElementById('home-view');
@@ -1156,6 +1258,7 @@
         const friendsListView = document.getElementById('friends-list-view');
         const friendRequestsView = document.getElementById('friend-requests-view');
         const profileView = document.getElementById('profile-view');
+        const userProfileView = document.getElementById('user-profile-view');
         
         // Navigation elements
         const navHome = document.getElementById('nav-home');
@@ -1207,6 +1310,13 @@
         const profileNameInput = document.getElementById('profile-name-input');
         const profileEmailInput = document.getElementById('profile-email-input');
         const profileSaveBtn = document.getElementById('profile-save-btn');
+        
+        // User profile elements
+        const userProfilePic = document.getElementById('user-profile-pic');
+        const userProfileName = document.getElementById('user-profile-name');
+        const userProfileStatus = document.getElementById('user-profile-status');
+        const userProfileActions = document.getElementById('user-profile-actions');
+        const userPostsContainer = document.getElementById('user-posts-container');
         
         // State variables
         let currentPrivateChatUserId = null;
@@ -1399,6 +1509,7 @@
             friendsListView.style.display = 'none';
             friendRequestsView.style.display = 'none';
             profileView.style.display = 'none';
+            userProfileView.style.display = 'none';
             
             // Reset nav active states
             navHome.classList.remove('active');
@@ -1436,6 +1547,9 @@
                 case 'profile':
                     profileView.style.display = 'block';
                     navProfile.classList.add('active');
+                    break;
+                case 'user-profile':
+                    userProfileView.style.display = 'block';
                     break;
             }
         }
@@ -1559,8 +1673,8 @@
             const timeAgo = getTimeAgo(post.timestamp.toDate());
             
             const userDisplay = post.userPhotoUrl 
-                ? `<div class="profile-pic" style="background-image: url(${post.userPhotoUrl}); background-color: ${post.userColor || '#4285f4'}"></div>`
-                : `<div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>`;
+                ? `<div class="profile-pic" style="background-image: url(${post.userPhotoUrl}); background-color: ${post.userColor || '#4285f4'}" onclick="showUserProfile('${post.userId}')"></div>`
+                : `<div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}" onclick="showUserProfile('${post.userId}')">${post.userPicText || 'U'}</div>`;
             
             const isCurrentUserPost = post.userId === currentUserId;
             const likeCount = post.likes ? Object.keys(post.likes).length : 0;
@@ -1727,7 +1841,7 @@
                 <div class="comment" data-comment-id="${comment.id || ''}">
                     <div class="profile-pic" style="${comment.userPhotoUrl ? 
                         `background-image: url(${comment.userPhotoUrl})` : 
-                        `background-color: ${comment.userColor || '#4285f4'}`}">
+                        `background-color: ${comment.userColor || '#4285f4'}`}" onclick="showUserProfile('${comment.userId}')">
                         ${comment.userPhotoUrl ? '' : comment.userPicText || 'U'}
                     </div>
                     <div style="flex: 1;">
@@ -1821,6 +1935,10 @@
                     </div>
                 `;
             }
+            
+            const userPic = message.userPhotoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${message.userPhotoUrl}); background-color: ${message.userColor || '#4285f4'}" onclick="showUserProfile('${message.userId}')"></div>`
+                : `<div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}" onclick="showUserProfile('${message.userId}')">${message.userPicText || 'U'}</div>`;
             
             messageElement.innerHTML = `
                 ${replyContent}
@@ -2012,8 +2130,8 @@
             userElement.dataset.userId = userId;
             
             const userPic = user.photoUrl 
-                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})"></div>`
-                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}">${user.name.charAt(0).toUpperCase()}</div>`;
+                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})" onclick="showUserProfile('${userId}')"></div>`
+                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}" onclick="showUserProfile('${userId}')">${user.name.charAt(0).toUpperCase()}</div>`;
             
             // Online status indicator
             const onlineStatus = user.isOnline ? 
@@ -2135,8 +2253,8 @@
             friendElement.dataset.userId = friendId;
             
             const friendPic = friend.photoUrl 
-                ? `<div class="profile-pic" style="background-image: url(${friend.photoUrl})"></div>`
-                : `<div class="profile-pic" style="background-color: ${friend.color || '#4285f4'}">${friend.name.charAt(0).toUpperCase()}</div>`;
+                ? `<div class="profile-pic" style="background-image: url(${friend.photoUrl})" onclick="showUserProfile('${friendId}')"></div>`
+                : `<div class="profile-pic" style="background-color: ${friend.color || '#4285f4'}" onclick="showUserProfile('${friendId}')">${friend.name.charAt(0).toUpperCase()}</div>`;
             
             // Online status indicator
             const onlineStatus = friend.isOnline ? 
@@ -2246,8 +2364,8 @@
             requestElement.className = 'friend-request';
             
             const userPic = user.photoUrl 
-                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})"></div>`
-                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}">${user.name.charAt(0).toUpperCase()}</div>`;
+                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})" onclick="showUserProfile('${userId}')"></div>`
+                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}" onclick="showUserProfile('${userId}')">${user.name.charAt(0).toUpperCase()}</div>`;
             
             requestElement.innerHTML = `
                 ${userPic}
@@ -2318,6 +2436,189 @@
                     console.error("Error rejecting friend request:", error);
                 });
             }
+        }
+
+        // Show user profile
+        function showUserProfile(userId) {
+            if (userId === currentUserId) {
+                showView('profile');
+                return;
+            }
+            
+            currentViewingUserId = userId;
+            showView('user-profile');
+            
+            // Load user data
+            db.collection("users").doc(userId).get().then(doc => {
+                if (doc.exists) {
+                    const user = doc.data();
+                    
+                    // Update profile header
+                    if (user.photoUrl) {
+                        userProfilePic.style.backgroundImage = `url(${user.photoUrl})`;
+                        userProfilePic.textContent = "";
+                    } else {
+                        userProfilePic.textContent = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+                        userProfilePic.style.backgroundColor = user.color || '#4285f4';
+                        userProfilePic.style.backgroundImage = "";
+                    }
+                    
+                    userProfileName.textContent = user.name || 'User';
+                    
+                    // Update online status
+                    const onlineStatus = user.isOnline ? 
+                        '<span class="online-status online"></span> <span class="active-now"><span class="pulse"></span>Active now</span>' : 
+                        `<span class="online-status offline"></span> Last online ${getLastOnlineText(user.lastOnline?.toDate())}`;
+                    
+                    userProfileStatus.innerHTML = onlineStatus;
+                    
+                    // Check friendship status
+                    const friendshipId = [currentUserId, userId].sort().join('_');
+                    db.collection("friendships").doc(friendshipId).get().then(friendshipDoc => {
+                        let actionHtml = '';
+                        
+                        if (!friendshipDoc.exists) {
+                            // Not friends - show add friend button
+                            actionHtml = `
+                                <button class="user-profile-action-btn primary" onclick="sendFriendRequest('${userId}', '${user.name}')">
+                                    Add Friend
+                                </button>
+                            `;
+                        } else {
+                            const friendship = friendshipDoc.data();
+                            
+                            if (friendship.status === "pending") {
+                                if (friendship.requestedBy === currentUserId) {
+                                    // Request sent
+                                    actionHtml = `
+                                        <button class="user-profile-action-btn secondary" disabled>
+                                            Request Sent
+                                        </button>
+                                    `;
+                                } else {
+                                    // Request received
+                                    actionHtml = `
+                                        <button class="user-profile-action-btn primary" onclick="respondToFriendRequest('${userId}', 'accept')">
+                                            Accept Request
+                                        </button>
+                                        <button class="user-profile-action-btn secondary" onclick="respondToFriendRequest('${userId}', 'reject')">
+                                            Reject
+                                        </button>
+                                    `;
+                                }
+                            } else if (friendship.status === "accepted") {
+                                // Friends
+                                actionHtml = `
+                                    <button class="user-profile-action-btn secondary" disabled>
+                                        Friends
+                                    </button>
+                                    <button class="user-profile-action-btn primary" onclick="startPrivateChat('${userId}', '${user.name}')">
+                                        Message
+                                    </button>
+                                `;
+                            }
+                        }
+                        
+                        userProfileActions.innerHTML = actionHtml;
+                    });
+                    
+                    // Load user's posts
+                    db.collection("posts")
+                        .where("userId", "==", userId)
+                        .orderBy("timestamp", "desc")
+                        .get()
+                        .then(snapshot => {
+                            userPostsContainer.innerHTML = '';
+                            
+                            if (snapshot.empty) {
+                                userPostsContainer.innerHTML = '<div class="empty-state">No posts yet</div>';
+                                return;
+                            }
+                            
+                            snapshot.forEach(doc => {
+                                const post = doc.data();
+                                post.id = doc.id;
+                                renderUserPost(post);
+                            });
+                        });
+                }
+            });
+        }
+
+        // Render a single post in user profile
+        function renderUserPost(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            
+            const timeAgo = getTimeAgo(post.timestamp.toDate());
+            
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <div>
+                        <div class="post-time">${timeAgo}</div>
+                    </div>
+                </div>
+                <div class="post-content">${post.text}</div>
+                ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image" onerror="this.style.display='none'">` : ''}
+                <div class="post-actions-bar">
+                    <div class="post-action">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span>Like</span>
+                    </div>
+                    <div class="post-action">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>Comment</span>
+                    </div>
+                </div>
+            `;
+            
+            userPostsContainer.appendChild(postElement);
+        }
+
+        // Start private chat with user
+        function startPrivateChat(userId, userName) {
+            currentPrivateChatUserId = userId;
+            currentPrivateChatUserName = userName;
+            
+            // Switch to chat view
+            showView('chat');
+            
+            // Update chat header
+            chatTitle.textContent = `Chat with ${userName}`;
+            chatBackButton.style.display = 'block';
+            
+            // Clear any existing status element
+            const existingStatus = document.querySelector('.user-status');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+            
+            // Load user status
+            db.collection("users").doc(userId).get().then(doc => {
+                if (doc.exists) {
+                    const user = doc.data();
+                    
+                    // Add online status to chat header
+                    const statusElement = document.createElement('div');
+                    statusElement.className = 'user-status';
+                    statusElement.innerHTML = `
+                        <span class="online-status ${user.isOnline ? 'online' : 'offline'}"></span>
+                        ${user.isOnline ? 
+                            '<span class="active-now"><span class="pulse"></span>Active now</span>' : 
+                            `Last online ${getLastOnlineText(user.lastOnline?.toDate())}`}
+                    `;
+                    
+                    // Insert after chat title
+                    chatTitle.parentNode.insertBefore(statusElement, chatTitle.nextSibling);
+                }
+            });
+            
+            // Load private messages
+            loadPrivateChatMessages(userId);
         }
 
         // Handle profile photo upload
