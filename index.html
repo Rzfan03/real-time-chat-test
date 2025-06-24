@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello!</title>
+    <title>Simple Social</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -73,7 +73,7 @@
             padding: 15px;
             box-shadow: var(--shadow);
             height: fit-content;
-            order: -1; /* Move sidebar to top on mobile */
+            order: -1;
         }
 
         .user-profile {
@@ -406,46 +406,57 @@
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
+            padding: 8px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .comment:hover {
+            background-color: var(--light-gray);
         }
 
         .comment-user {
             font-weight: 600;
             font-size: 13px;
+            color: var(--primary-color);
         }
 
         .comment-content {
             font-size: 13px;
             word-break: break-word;
-        }
-
-        .comment-input-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .comment-input {
             flex: 1;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-round);
-            padding: 8px 12px;
-            font-size: 13px;
         }
 
-        .comment-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        .comment-time {
+            font-size: 11px;
+            color: var(--medium-gray);
+            margin-top: 2px;
         }
 
-        .comment-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0 15px;
-            border-radius: var(--border-radius-round);
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .comment-action {
+            font-size: 11px;
+            color: var(--medium-gray);
             cursor: pointer;
-            font-weight: 600;
             transition: var(--transition);
-            font-size: 13px;
+        }
+
+        .comment-action:hover {
+            color: var(--primary-color);
+        }
+
+        .comment-reply-input {
+            margin-top: 5px;
+            display: none;
+        }
+
+        .comment-reply-input.show {
+            display: flex;
         }
 
         /* Chat styles */
@@ -512,6 +523,7 @@
             border-radius: var(--border-radius);
             font-size: 14px;
             word-break: break-word;
+            position: relative;
         }
 
         .message.sent .message-content {
@@ -528,6 +540,13 @@
             font-weight: 600;
             font-size: 12px;
             margin-bottom: 5px;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: var(--medium-gray);
+            margin-top: 5px;
+            text-align: right;
         }
 
         .chat-input-container {
@@ -590,6 +609,7 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: var(--transition);
+            position: relative;
         }
 
         .user-item:hover {
@@ -598,6 +618,83 @@
 
         .user-item.active {
             background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .friend-status {
+            position: absolute;
+            right: 10px;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: var(--border-radius-round);
+        }
+
+        .friend-status.friends {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .friend-status.pending {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+
+        .friend-status.add {
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Friends list */
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .friends-list-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Friend requests */
+        .friend-requests {
+            margin-top: 15px;
+        }
+
+        .friend-requests-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .request-action {
+            padding: 2px 8px;
+            border-radius: var(--border-radius-round);
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .request-action.accept {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .request-action.decline {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
         }
 
         /* Modal styles */
@@ -668,12 +765,12 @@
             font-weight: 600;
             transition: var(--transition);
             font-size: 14px;
+            border: none;
         }
 
         .modal-button.primary {
             background-color: var(--primary-color);
             color: white;
-            border: none;
         }
 
         .modal-button.primary:hover {
@@ -683,7 +780,6 @@
         .modal-button.secondary {
             background-color: var(--light-gray);
             color: var(--dark-gray);
-            border: none;
         }
 
         .modal-button.secondary:hover {
@@ -742,6 +838,36 @@
             font-weight: 600;
         }
 
+        /* Notification badge */
+        .notification-badge {
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Loading state */
+        .comments-loading {
+            text-align: center;
+            padding: 10px;
+            color: var(--medium-gray);
+            font-size: 13px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: var(--medium-gray);
+            font-size: 14px;
+        }
+
         /* Responsive adjustments */
         @media (min-width: 768px) {
             .container {
@@ -751,7 +877,7 @@
             }
             
             .sidebar {
-                order: 0; /* Reset order for desktop */
+                order: 0;
             }
             
             .header {
@@ -821,7 +947,7 @@
 <body>
     <div class="header">
         <button class="menu-toggle" id="menuToggle">☰</button>
-        <div class="logo">Hello!</div>
+        <div class="logo">Simple Social</div>
         <div style="width: 40px;"></div> <!-- Spacer for alignment -->
     </div>
     
@@ -832,6 +958,7 @@
                 <div class="username" id="currentUsername">User</div>
                 
                 <div class="profile-menu" id="profileMenu">
+                    <div class="profile-menu-item" id="addFriendBtn">Add Friend</div>
                     <div class="profile-menu-item" id="changeNameBtn">Change Name</div>
                     <div class="profile-menu-item" id="changePhotoBtn">Change Photo</div>
                 </div>
@@ -844,6 +971,18 @@
 
             <div id="usersListContainer">
                 <!-- Users list will be loaded here for private chat -->
+            </div>
+
+            <div class="friends-list" id="friendsListContainer">
+                <div class="friends-list-title">Your Friends</div>
+                <!-- Friends list will be loaded here -->
+                <div class="empty-state">No friends yet</div>
+            </div>
+
+            <div class="friend-requests" id="friendRequestsContainer">
+                <div class="friend-requests-title">Friend Requests</div>
+                <!-- Friend requests will be loaded here -->
+                <div class="empty-state">No pending requests</div>
             </div>
         </div>
         
@@ -865,7 +1004,7 @@
                     <div class="post-actions">
                         <button class="action-button" id="addPhotoBtn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <rect x="3" y="3" width="18" width="18" rx="2" ry="2"></rect>
                                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                 <polyline points="21 15 16 10 5 21"></polyline>
                             </svg>
@@ -879,6 +1018,7 @@
             
             <div class="posts-container" id="postsContainer">
                 <!-- Posts will be loaded here -->
+                <div class="empty-state">No posts yet. Be the first to post!</div>
             </div>
             
             <div class="chat-container">
@@ -897,6 +1037,7 @@
                 
                 <div class="chat-messages" id="chatMessages">
                     <!-- Chat messages will be loaded here -->
+                    <div class="empty-state">No messages yet. Start the conversation!</div>
                 </div>
                 
                 <div class="chat-input-container">
@@ -938,6 +1079,18 @@
         </div>
     </div>
     
+    <!-- Add Friend Modal -->
+    <div class="modal" id="addFriendModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAddFriendModal">×</button>
+            <div class="modal-title">Add Friend</div>
+            <input type="text" class="modal-input" id="friendSearchInput" placeholder="Search for friends...">
+            <div class="users-list" id="friendSearchResults">
+                <div class="empty-state">Type at least 2 characters to search</div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // Firebase config
         const firebaseConfig = {
@@ -959,12 +1112,14 @@
         let currentUserPicText = "U";
         let currentUserPhotoUrl = "";
         let currentUserColor = '#4285f4';
+        let pendingFriendRequestsCount = 0;
 
         // DOM elements
         const currentUserPic = document.getElementById('currentUserPic');
         const currentUsername = document.getElementById('currentUsername');
         const postUserPic = document.getElementById('postUserPic');
         const profileMenu = document.getElementById('profileMenu');
+        const addFriendBtn = document.getElementById('addFriendBtn');
         const changeNameBtn = document.getElementById('changeNameBtn');
         const changePhotoBtn = document.getElementById('changePhotoBtn');
         const nameModal = document.getElementById('nameModal');
@@ -998,21 +1153,41 @@
         const publicChatTab = document.getElementById('publicChatTab');
         const privateChatTab = document.getElementById('privateChatTab');
         const usersListContainer = document.getElementById('usersListContainer');
+        const friendsListContainer = document.getElementById('friendsListContainer');
+        const friendRequestsContainer = document.getElementById('friendRequestsContainer');
         const chatTitle = document.getElementById('chatTitle');
         const chatBackButton = document.getElementById('chatBackButton');
+        const addFriendModal = document.getElementById('addFriendModal');
+        const closeAddFriendModal = document.getElementById('closeAddFriendModal');
+        const friendSearchInput = document.getElementById('friendSearchInput');
+        const friendSearchResults = document.getElementById('friendSearchResults');
 
         // Chat state
         let replyingToMessageId = null;
         let replyingToUserName = null;
-        let currentChatMode = 'public'; // 'public' or 'private'
+        let currentChatMode = 'public';
         let currentPrivateChatUserId = null;
+        let currentPrivateChatUserName = null;
 
         // Initialize the app
         function init() {
+            // Register current user
+            db.collection("users").doc(currentUserId).set({
+                id: currentUserId,
+                name: currentUserName,
+                color: currentUserColor,
+                photoUrl: currentUserPhotoUrl || null,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).catch(error => {
+                console.error("Error registering user:", error);
+            });
+
             loadUserData();
             setupEventListeners();
             loadPosts();
             loadPublicChatMessages();
+            loadFriends();
+            loadFriendRequests();
             
             // Hide preview containers initially
             imagePreviewContainer.classList.add('hidden');
@@ -1033,6 +1208,11 @@
                 currentUserName = name;
                 currentUserPicText = name.charAt(0).toUpperCase();
                 localStorage.setItem('socialMediaUsername', name);
+                
+                // Update in database
+                db.collection("users").doc(currentUserId).update({
+                    name: currentUserName
+                });
             }
             
             if (storedPhoto) {
@@ -1057,6 +1237,11 @@
             postUserPic.style.backgroundImage = `url(${url})`;
             postUserPic.textContent = '';
             postUserPic.style.backgroundColor = 'transparent';
+            
+            // Update in database
+            db.collection("users").doc(currentUserId).update({
+                photoUrl: url || null
+            });
         }
 
         // Update profile initials display
@@ -1148,83 +1333,14 @@
             // Chat back button
             chatBackButton.addEventListener('click', () => {
                 currentPrivateChatUserId = null;
+                currentPrivateChatUserName = null;
                 switchChatMode('private');
             });
-        }
-
-        // Switch between public and private chat
-        function switchChatMode(mode) {
-            currentChatMode = mode;
             
-            if (mode === 'public') {
-                publicChatTab.classList.add('active');
-                privateChatTab.classList.remove('active');
-                usersListContainer.innerHTML = '';
-                chatTitle.textContent = 'Public Chat';
-                chatBackButton.style.display = 'none';
-                loadPublicChatMessages();
-            } else {
-                publicChatTab.classList.remove('active');
-                privateChatTab.classList.add('active');
-                chatTitle.textContent = 'Private Chat';
-                chatBackButton.style.display = currentPrivateChatUserId ? 'block' : 'none';
-                loadUsersList();
-                
-                if (currentPrivateChatUserId) {
-                    loadPrivateChatMessages(currentPrivateChatUserId);
-                } else {
-                    chatMessagesContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--medium-gray);">Select a user to start private chat</div>';
-                }
-            }
-        }
-
-        // Load users list for private chat
-        function loadUsersList() {
-            // In a real app, you would fetch users from your database
-            // For demo purposes, we'll create some dummy users
-            const dummyUsers = [
-                { id: 'user_1', name: 'John Doe', color: '#4285f4' },
-                { id: 'user_2', name: 'Jane Smith', color: '#34a853' },
-                { id: 'user_3', name: 'Mike Johnson', color: '#ea4335' },
-                { id: 'user_4', name: 'Sarah Williams', color: '#fbbc05' },
-                { id: 'user_5', name: 'David Brown', color: '#673ab7' }
-            ];
-            
-            // Add current user to the list (for demo purposes)
-            const users = [...dummyUsers, { 
-                id: currentUserId, 
-                name: currentUserName, 
-                color: currentUserColor,
-                photoUrl: currentUserPhotoUrl 
-            }];
-            
-            usersListContainer.innerHTML = '';
-            
-            users.forEach(user => {
-                if (user.id !== currentUserId) { // Don't show current user in the list
-                    const userElement = document.createElement('div');
-                    userElement.className = 'user-item';
-                    userElement.dataset.userId = user.id;
-                    
-                    const userPic = user.photoUrl 
-                        ? `<div class="profile-pic" style="background-image: url(${user.photoUrl}); background-color: ${user.color}"></div>`
-                        : `<div class="profile-pic" style="background-color: ${user.color}">${user.name.charAt(0).toUpperCase()}</div>`;
-                    
-                    userElement.innerHTML = `
-                        ${userPic}
-                        <div>${user.name}</div>
-                    `;
-                    
-                    userElement.addEventListener('click', () => {
-                        currentPrivateChatUserId = user.id;
-                        chatTitle.textContent = `Chat with ${user.name}`;
-                        chatBackButton.style.display = 'block';
-                        loadPrivateChatMessages(user.id);
-                    });
-                    
-                    usersListContainer.appendChild(userElement);
-                }
-            });
+            // Add friend modal
+            addFriendBtn.addEventListener('click', showAddFriendModal);
+            closeAddFriendModal.addEventListener('click', hideAddFriendModal);
+            friendSearchInput.addEventListener('input', searchFriends);
         }
 
         // Toggle profile menu
@@ -1253,6 +1369,11 @@
                 currentUsername.textContent = newName;
                 localStorage.setItem('socialMediaUsername', newName);
                 
+                // Update in database
+                db.collection("users").doc(currentUserId).update({
+                    name: currentUserName
+                });
+                
                 // Update display if no photo is set
                 if (!currentUserPhotoUrl) {
                     updateProfileInitials();
@@ -1280,7 +1401,6 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // Validate file type
             const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validTypes.includes(file.type)) {
                 alert('Please select a valid image file (JPEG, PNG, GIF)');
@@ -1288,8 +1408,7 @@
                 return;
             }
 
-            // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024; // 5MB
+            const maxSize = 5 * 1024 * 1024;
             if (file.size > maxSize) {
                 alert('Image size must be less than 5MB');
                 profilePhotoUpload.value = '';
@@ -1323,11 +1442,9 @@
             
             try {
                 if (file) {
-                    // Show loading state
                     savePhotoChange.disabled = true;
                     savePhotoChange.innerHTML = '<span class="loading"></span> Saving...';
                     
-                    // Convert to base64 for localStorage
                     const base64String = await new Promise((resolve, reject) => {
                         const reader = new FileReader();
                         reader.onload = () => resolve(reader.result);
@@ -1339,7 +1456,6 @@
                     updateProfilePicture(currentUserPhotoUrl);
                     localStorage.setItem('socialMediaUserPhoto', currentUserPhotoUrl);
                 } else {
-                    // Remove profile photo
                     currentUserPhotoUrl = "";
                     updateProfileInitials();
                     localStorage.removeItem('socialMediaUserPhoto');
@@ -1355,44 +1471,495 @@
             }
         }
 
+        // Show add friend modal
+        function showAddFriendModal() {
+            profileMenu.classList.remove('show');
+            friendSearchInput.value = '';
+            friendSearchResults.innerHTML = '<div class="empty-state">Type at least 2 characters to search</div>';
+            addFriendModal.classList.add('show');
+        }
+
+        // Hide add friend modal
+        function hideAddFriendModal() {
+            addFriendModal.classList.remove('show');
+        }
+
+        // Search for friends
+        function searchFriends() {
+            const searchTerm = friendSearchInput.value.trim().toLowerCase();
+            const resultsContainer = friendSearchResults;
+            
+            if (searchTerm.length < 2) {
+                resultsContainer.innerHTML = '<div class="empty-state">Type at least 2 characters to search</div>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = '<div class="comments-loading">Searching...</div>';
+            
+            db.collection("friendships")
+                .where("users", "array-contains", currentUserId)
+                .get()
+                .then(friendshipsSnapshot => {
+                    const friendships = {};
+                    friendshipsSnapshot.forEach(doc => {
+                        const friendship = doc.data();
+                        const friendId = friendship.users.find(id => id !== currentUserId);
+                        friendships[friendId] = friendship.status;
+                    });
+                    
+                    db.collection("users")
+                        .where("id", "!=", currentUserId)
+                        .get()
+                        .then(usersSnapshot => {
+                            resultsContainer.innerHTML = '';
+                            
+                            if (usersSnapshot.empty) {
+                                resultsContainer.innerHTML = '<div class="empty-state">No users found</div>';
+                                return;
+                            }
+                            
+                            let foundUsers = 0;
+                            
+                            usersSnapshot.forEach(userDoc => {
+                                const user = userDoc.data();
+                                const userId = user.id;
+                                const userName = user.name.toLowerCase();
+                                
+                                if (userName.includes(searchTerm)) {
+                                    foundUsers++;
+                                    const friendshipStatus = friendships[userId] || "not_friends";
+                                    renderFriendSearchResult(user, userId, friendshipStatus);
+                                }
+                            });
+                            
+                            if (foundUsers === 0) {
+                                resultsContainer.innerHTML = '<div class="empty-state">No matching users found</div>';
+                            }
+                        });
+                })
+                .catch(error => {
+                    console.error("Error searching users:", error);
+                    resultsContainer.innerHTML = '<div class="empty-state">Error searching users</div>';
+                });
+        }
+
+        // Render a friend search result
+        function renderFriendSearchResult(user, userId, friendshipStatus) {
+            const resultElement = document.createElement('div');
+            resultElement.className = 'user-item';
+            resultElement.dataset.userId = userId;
+            
+            const userPic = user.photoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})"></div>`
+                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}">${user.name.charAt(0).toUpperCase()}</div>`;
+            
+            let statusHtml = '';
+            if (friendshipStatus === "accepted") {
+                statusHtml = '<div class="friend-status friends">Friends</div>';
+            } else if (friendshipStatus === "pending") {
+                if (user.id === currentUserId) {
+                    statusHtml = '<div class="friend-status pending">Request Sent</div>';
+                } else {
+                    statusHtml = '<div class="friend-status pending">Request Received</div>';
+                }
+            } else {
+                statusHtml = `<div class="friend-status add" data-user-id="${userId}">Add Friend</div>`;
+            }
+            
+            resultElement.innerHTML = `
+                ${userPic}
+                <div>${user.name}</div>
+                ${statusHtml}
+            `;
+            
+            const addFriendBtn = resultElement.querySelector('.add');
+            if (addFriendBtn) {
+                addFriendBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sendFriendRequest(userId, user.name);
+                    hideAddFriendModal();
+                });
+            }
+            
+            friendSearchResults.appendChild(resultElement);
+        }
+
+        // Send friend request
+        function sendFriendRequest(userId, userName) {
+            db.collection("friendships")
+                .where("users", "array-contains", currentUserId)
+                .where("users", "array-contains", userId)
+                .get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        alert(`You already have a pending friend request with ${userName}`);
+                        return;
+                    }
+                    
+                    db.collection("friendships").add({
+                        users: [currentUserId, userId],
+                        requesterId: currentUserId,
+                        recipientId: userId,
+                        status: "pending",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                    .then(() => {
+                        alert(`Friend request sent to ${userName}`);
+                        loadUsersList();
+                        loadFriendRequests();
+                    })
+                    .catch(error => {
+                        console.error("Error sending friend request:", error);
+                        alert("Error sending friend request. Please try again.");
+                    });
+                });
+        }
+
+        // Load friends list
+        function loadFriends() {
+            db.collection("friendships")
+                .where("users", "array-contains", currentUserId)
+                .where("status", "==", "accepted")
+                .onSnapshot((snapshot) => {
+                    const friendsList = friendsListContainer.querySelector('.friends-list-title').nextElementSibling;
+                    if (friendsList && friendsList.classList.contains('empty-state')) {
+                        friendsList.remove();
+                    }
+                    
+                    friendsListContainer.innerHTML = '<div class="friends-list-title">Your Friends</div>';
+                    
+                    if (snapshot.empty) {
+                        friendsListContainer.innerHTML += '<div class="empty-state">No friends yet</div>';
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const friendship = doc.data();
+                        const friendId = friendship.users.find(id => id !== currentUserId);
+                        
+                        db.collection("users").doc(friendId).get().then(friendDoc => {
+                            if (friendDoc.exists) {
+                                const friend = friendDoc.data();
+                                renderFriend(friend, friendId);
+                            }
+                        });
+                    });
+                }, (error) => {
+                    console.error("Error loading friends:", error);
+                    friendsListContainer.innerHTML = '<div class="friends-list-title">Your Friends</div><div class="empty-state">Error loading friends</div>';
+                });
+        }
+
+        // Render a single friend
+        function renderFriend(friend, friendId) {
+            const friendElement = document.createElement('div');
+            friendElement.className = 'user-item';
+            friendElement.dataset.userId = friendId;
+            
+            const friendPic = friend.photoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${friend.photoUrl})"></div>`
+                : `<div class="profile-pic" style="background-color: ${friend.color || '#4285f4'}">${friend.name.charAt(0).toUpperCase()}</div>`;
+            
+            friendElement.innerHTML = `
+                ${friendPic}
+                <div>${friend.name}</div>
+                <div class="friend-status friends">Friends</div>
+            `;
+            
+            friendElement.addEventListener('click', () => {
+                currentPrivateChatUserId = friendId;
+                currentPrivateChatUserName = friend.name;
+                chatTitle.textContent = `Chat with ${friend.name}`;
+                chatBackButton.style.display = 'block';
+                loadPrivateChatMessages(friendId);
+            });
+            
+            friendsListContainer.appendChild(friendElement);
+        }
+
+        // Load friend requests
+        function loadFriendRequests() {
+            db.collection("friendships")
+                .where("recipientId", "==", currentUserId)
+                .where("status", "==", "pending")
+                .onSnapshot((snapshot) => {
+                    const requestsTitle = friendRequestsContainer.querySelector('.friend-requests-title');
+                    if (requestsTitle.nextElementSibling && requestsTitle.nextElementSibling.classList.contains('empty-state')) {
+                        requestsTitle.nextElementSibling.remove();
+                    }
+                    
+                    friendRequestsContainer.innerHTML = '<div class="friend-requests-title">Friend Requests</div>';
+                    pendingFriendRequestsCount = snapshot.size;
+                    updateFriendRequestBadge();
+                    
+                    if (snapshot.empty) {
+                        friendRequestsContainer.innerHTML += '<div class="empty-state">No pending requests</div>';
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const request = doc.data();
+                        const requesterId = request.requesterId;
+                        
+                        db.collection("users").doc(requesterId).get().then(userDoc => {
+                            if (userDoc.exists) {
+                                const requester = userDoc.data();
+                                renderFriendRequest(requester, requesterId, doc.id);
+                            }
+                        });
+                    });
+                }, (error) => {
+                    console.error("Error loading friend requests:", error);
+                    friendRequestsContainer.innerHTML = '<div class="friend-requests-title">Friend Requests</div><div class="empty-state">Error loading requests</div>';
+                });
+        }
+
+        // Update friend request notification badge
+        function updateFriendRequestBadge() {
+            const title = document.querySelector('.friend-requests-title');
+            let badge = title.querySelector('.notification-badge');
+            
+            if (pendingFriendRequestsCount > 0) {
+                if (!badge) {
+                    badge = document.createElement('div');
+                    badge.className = 'notification-badge';
+                    title.appendChild(badge);
+                }
+                badge.textContent = pendingFriendRequestsCount;
+            } else if (badge) {
+                badge.remove();
+            }
+        }
+
+        // Render a single friend request
+        function renderFriendRequest(requester, requesterId, requestId) {
+            const requestElement = document.createElement('div');
+            requestElement.className = 'user-item';
+            requestElement.dataset.userId = requesterId;
+            
+            const requesterPic = requester.photoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${requester.photoUrl})"></div>`
+                : `<div class="profile-pic" style="background-color: ${requester.color || '#4285f4'}">${requester.name.charAt(0).toUpperCase()}</div>`;
+            
+            requestElement.innerHTML = `
+                ${requesterPic}
+                <div>${requester.name}</div>
+                <div class="request-actions">
+                    <button class="request-action accept" data-request-id="${requestId}">Accept</button>
+                    <button class="request-action decline" data-request-id="${requestId}">Decline</button>
+                </div>
+            `;
+            
+            const acceptBtn = requestElement.querySelector('.accept');
+            const declineBtn = requestElement.querySelector('.decline');
+            
+            acceptBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                acceptFriendRequest(requestId, requesterId);
+            });
+            
+            declineBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                declineFriendRequest(requestId);
+            });
+            
+            friendRequestsContainer.appendChild(requestElement);
+        }
+
+        // Accept friend request
+        function acceptFriendRequest(requestId, requesterId) {
+            db.collection("friendships").doc(requestId).update({
+                status: "accepted",
+                acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                db.collection("friendships").add({
+                    users: [currentUserId, requesterId],
+                    requesterId: requesterId,
+                    recipientId: currentUserId,
+                    status: "accepted",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                loadFriends();
+                loadFriendRequests();
+            })
+            .catch(error => {
+                console.error("Error accepting friend request:", error);
+                alert("Error accepting friend request. Please try again.");
+            });
+        }
+
+        // Decline friend request
+        function declineFriendRequest(requestId) {
+            db.collection("friendships").doc(requestId).delete()
+            .then(() => {
+                loadFriendRequests();
+            })
+            .catch(error => {
+                console.error("Error declining friend request:", error);
+                alert("Error declining friend request. Please try again.");
+            });
+        }
+
+        // Load users list for private chat
+        function loadUsersList() {
+            db.collection("users")
+                .where("id", "!=", currentUserId)
+                .get()
+                .then(usersSnapshot => {
+                    usersListContainer.innerHTML = '';
+                    
+                    if (usersSnapshot.empty) {
+                        usersListContainer.innerHTML = '<div class="empty-state">No other users found</div>';
+                        return;
+                    }
+                    
+                    db.collection("friendships")
+                        .where("users", "array-contains", currentUserId)
+                        .get()
+                        .then(friendshipsSnapshot => {
+                            const friendships = {};
+                            friendshipsSnapshot.forEach(doc => {
+                                const friendship = doc.data();
+                                const friendId = friendship.users.find(id => id !== currentUserId);
+                                friendships[friendId] = friendship.status;
+                            });
+                            
+                            usersSnapshot.forEach(userDoc => {
+                                const user = userDoc.data();
+                                const userId = user.id;
+                                const friendshipStatus = friendships[userId] || "not_friends";
+                                
+                                renderUserListItem(user, userId, friendshipStatus);
+                            });
+                        });
+                })
+                .catch(error => {
+                    console.error("Error loading users:", error);
+                    usersListContainer.innerHTML = '<div class="empty-state">Error loading users</div>';
+                });
+        }
+
+        // Render a single user in the users list
+        function renderUserListItem(user, userId, friendshipStatus) {
+            const userElement = document.createElement('div');
+            userElement.className = 'user-item';
+            userElement.dataset.userId = userId;
+            
+            const userPic = user.photoUrl 
+                ? `<div class="profile-pic" style="background-image: url(${user.photoUrl})"></div>`
+                : `<div class="profile-pic" style="background-color: ${user.color || '#4285f4'}">${user.name.charAt(0).toUpperCase()}</div>`;
+            
+            let statusHtml = '';
+            if (friendshipStatus === "accepted") {
+                statusHtml = '<div class="friend-status friends">Friends</div>';
+            } else if (friendshipStatus === "pending") {
+                if (user.id === currentUserId) {
+                    statusHtml = '<div class="friend-status pending">Request Sent</div>';
+                } else {
+                    statusHtml = '<div class="friend-status pending">Request Received</div>';
+                }
+            } else {
+                statusHtml = `<div class="friend-status add" data-user-id="${userId}">Add Friend</div>`;
+            }
+            
+            userElement.innerHTML = `
+                ${userPic}
+                <div>${user.name}</div>
+                ${statusHtml}
+            `;
+            
+            if (friendshipStatus === "accepted") {
+                userElement.addEventListener('click', () => {
+                    currentPrivateChatUserId = userId;
+                    currentPrivateChatUserName = user.name;
+                    chatTitle.textContent = `Chat with ${user.name}`;
+                    chatBackButton.style.display = 'block';
+                    loadPrivateChatMessages(userId);
+                });
+            }
+            
+            const addFriendBtn = userElement.querySelector('.add');
+            if (addFriendBtn) {
+                addFriendBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sendFriendRequest(userId, user.name);
+                });
+            }
+            
+            usersListContainer.appendChild(userElement);
+        }
+
+        // Switch between public and private chat
+        function switchChatMode(mode) {
+            currentChatMode = mode;
+            
+            if (mode === 'public') {
+                publicChatTab.classList.add('active');
+                privateChatTab.classList.remove('active');
+                usersListContainer.innerHTML = '';
+                chatTitle.textContent = 'Public Chat';
+                chatBackButton.style.display = 'none';
+                loadPublicChatMessages();
+            } else {
+                publicChatTab.classList.remove('active');
+                privateChatTab.classList.add('active');
+                chatTitle.textContent = currentPrivateChatUserId ? `Chat with ${currentPrivateChatUserName}` : 'Private Chat';
+                chatBackButton.style.display = currentPrivateChatUserId ? 'block' : 'none';
+                loadUsersList();
+                
+                if (currentPrivateChatUserId) {
+                    loadPrivateChatMessages(currentPrivateChatUserId);
+                } else {
+                    chatMessagesContainer.innerHTML = '<div class="empty-state">Select a friend to start private chat</div>';
+                }
+            }
+        }
+
         // Load posts from Firestore
         function loadPosts() {
             db.collection("posts")
                 .orderBy("timestamp", "desc")
                 .onSnapshot((snapshot) => {
+                    const emptyState = postsContainer.querySelector('.empty-state');
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+                    
                     postsContainer.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        postsContainer.innerHTML = '<div class="empty-state">No posts yet. Be the first to post!</div>';
+                        return;
+                    }
+                    
                     snapshot.forEach((doc) => {
                         const post = doc.data();
-                        post.id = doc.id; // Add the document ID to the post object
+                        post.id = doc.id;
                         renderPost(post);
                     });
                 }, (error) => {
                     console.error("Error loading posts:", error);
-                    alert("Error loading posts. Please refresh the page.");
+                    postsContainer.innerHTML = '<div class="empty-state">Error loading posts. Please refresh the page.</div>';
                 });
         }
 
-        // Render a single post
+        // Render a single post with enhanced comments
         function renderPost(post) {
             const postElement = document.createElement('div');
             postElement.className = 'post';
             
-            // Format time
             const timeAgo = getTimeAgo(post.timestamp.toDate());
             
-            // Determine if the post has a photo or just initials
             const userDisplay = post.userPhotoUrl 
                 ? `<div class="profile-pic" style="background-image: url(${post.userPhotoUrl}); background-color: ${post.userColor || '#4285f4'}"></div>`
                 : `<div class="profile-pic" style="background-color: ${post.userColor || '#4285f4'}">${post.userPicText || 'U'}</div>`;
             
-            // Check if the post belongs to the current user
             const isCurrentUserPost = post.userId === currentUserId;
-            
-            // Get like count
             const likeCount = post.likes ? Object.keys(post.likes).length : 0;
             const isLiked = post.likes && post.likes[currentUserId];
-            
-            // Get comment count
             const commentCount = post.comments ? post.comments.length : 0;
             
             postElement.innerHTML = `
@@ -1434,12 +2001,9 @@
                 </div>
                 <div class="comments-section" id="comments-${post.id}">
                     <div class="comments-list" id="comments-list-${post.id}">
-                        ${post.comments ? post.comments.map(comment => `
-                            <div class="comment">
-                                <div class="comment-user">${comment.userName}:</div>
-                                <div class="comment-content">${comment.text}</div>
-                            </div>
-                        `).join('') : ''}
+                        ${post.comments && post.comments.length > 0 ? 
+                            post.comments.map(comment => renderComment(comment)).join('') : 
+                            '<div class="empty-state">No comments yet</div>'}
                     </div>
                     <div class="comment-input-container">
                         <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Write a comment...">
@@ -1448,14 +2012,14 @@
                 </div>
             `;
             
-            // Add event listeners
             const likeButton = postElement.querySelector('[data-action="like"]');
             const commentButton = postElement.querySelector('[data-action="comment"]');
             const shareButton = postElement.querySelector('[data-action="share"]');
             const deleteButton = postElement.querySelector('.delete-post');
-            const commentInput = postElement.querySelector('.comment-input');
-            const commentPostButton = postElement.querySelector('.comment-button');
+            const commentInput = postElement.querySelector(`#comment-input-${post.id}`);
+            const commentPostButton = postElement.querySelector(`.comment-button[data-post-id="${post.id}"]`);
             const commentsSection = postElement.querySelector('.comments-section');
+            const commentsList = postElement.querySelector(`#comments-list-${post.id}`);
             
             if (likeButton) {
                 likeButton.addEventListener('click', () => toggleLike(post.id));
@@ -1510,7 +2074,51 @@
                 });
             }
             
+            // Handle comment replies and deletions
+            commentsList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('reply-btn')) {
+                    const commentElement = e.target.closest('.comment');
+                    const replyInput = commentElement.querySelector('.comment-reply-input');
+                    replyInput.classList.toggle('show');
+                } else if (e.target.classList.contains('delete-btn')) {
+                    if (confirm("Are you sure you want to delete this comment?")) {
+                        const commentElement = e.target.closest('.comment');
+                        const commentId = commentElement.dataset.commentId;
+                        deleteComment(post.id, commentId);
+                    }
+                }
+            });
+            
             postsContainer.appendChild(postElement);
+        }
+
+        // Render a single comment with enhanced features
+        function renderComment(comment) {
+            const timeAgo = comment.timestamp ? getTimeAgo(comment.timestamp.toDate()) : 'Just now';
+            
+            return `
+                <div class="comment" data-comment-id="${comment.id || ''}">
+                    <div class="profile-pic" style="${comment.userPhotoUrl ? 
+                        `background-image: url(${comment.userPhotoUrl})` : 
+                        `background-color: ${comment.userColor || '#4285f4'}`}">
+                        ${comment.userPhotoUrl ? '' : comment.userPicText || 'U'}
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="comment-user">${comment.userName || 'User'}</div>
+                        <div class="comment-content">${comment.text}</div>
+                        <div class="comment-time">${timeAgo}</div>
+                        <div class="comment-actions">
+                            <span class="comment-action reply-btn">Reply</span>
+                            ${comment.userId === currentUserId ? 
+                                `<span class="comment-action delete-btn">Delete</span>` : ''}
+                        </div>
+                        <div class="comment-reply-input" id="reply-input-${comment.id || ''}">
+                            <input type="text" class="comment-input" placeholder="Write a reply...">
+                            <button class="comment-button" data-comment-id="${comment.id || ''}">Post</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // Toggle like on a post
@@ -1525,59 +2133,75 @@
                     
                     const postData = postDoc.data();
                     const likes = postData.likes || {};
-                    const likeCount = Object.keys(likes).length;
                     
                     if (likes[currentUserId]) {
-                        // Unlike
                         delete likes[currentUserId];
                     } else {
-                        // Like
                         likes[currentUserId] = true;
                     }
                     
                     transaction.update(postRef, { likes: likes });
-                    return { likes: likes, likeCount: likeCount };
+                    return likes;
                 });
-            }).then(() => {
-                console.log("Like updated successfully");
             }).catch((error) => {
                 console.error("Error updating like: ", error);
             });
         }
 
         // Add comment to a post
-        function addComment(postId, commentText) {
+        function addComment(postId, commentText, parentCommentId = null) {
             const postRef = db.collection("posts").doc(postId);
             const newComment = {
+                id: 'comment_' + Math.random().toString(36).substr(2, 9),
                 userId: currentUserId,
                 userName: currentUserName,
                 userPicText: currentUserPicText,
                 userColor: currentUserColor,
                 userPhotoUrl: currentUserPhotoUrl || null,
                 text: commentText,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                parentCommentId: parentCommentId || null
             };
             
             postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             }).catch((error) => {
                 console.error("Error adding comment: ", error);
+                alert("Error adding comment. Please try again.");
             });
         }
 
-        // Upload image to ImgBB (free service)
+        // Delete a comment from a post
+        function deleteComment(postId, commentId) {
+            const postRef = db.collection("posts").doc(postId);
+            
+            postRef.get().then((doc) => {
+                if (doc.exists) {
+                    const postData = doc.data();
+                    const comments = postData.comments || [];
+                    const updatedComments = comments.filter(comment => comment.id !== commentId);
+                    
+                    return postRef.update({
+                        comments: updatedComments
+                    });
+                }
+            }).catch((error) => {
+                console.error("Error deleting comment: ", error);
+                alert("Error deleting comment. Please try again.");
+            });
+        }
+
+        // Upload image to ImgBB
         async function uploadImageToImgBB(imageFile) {
             if (!imageFile) return null;
             
-            // Validate file type
             const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validTypes.includes(imageFile.type)) {
                 alert('Please select a valid image file (JPEG, PNG, GIF)');
                 return null;
             }
 
-            // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024; // 5MB
+            const maxSize = 5 * 1024 * 1024;
             if (imageFile.size > maxSize) {
                 alert('Image size must be less than 5MB');
                 return null;
@@ -1587,7 +2211,6 @@
             formData.append('image', imageFile);
             
             try {
-                // Note: You need to get your own free API key from imgbb.com
                 const response = await fetch('https://api.imgbb.com/1/upload?key=cb4fd06a940b689c1374b73b95ff39e8', {
                     method: 'POST',
                     body: formData
@@ -1599,7 +2222,7 @@
                 
                 const data = await response.json();
                 if (data.success) {
-                    return data.data.url; // Return the direct image URL
+                    return data.data.url;
                 } else {
                     throw new Error('Image upload failed');
                 }
@@ -1620,14 +2243,12 @@
                 return;
             }
             
-            // Show loading state
             const originalButtonText = postButton.textContent;
             postButton.innerHTML = '<span class="loading"></span>';
             postButton.disabled = true;
 
             let imageUrl = '';
             
-            // If there's an image, upload it to ImgBB
             if (imageFile) {
                 try {
                     imageUrl = await uploadImageToImgBB(imageFile);
@@ -1644,7 +2265,6 @@
                 }
             }
             
-            // Create a new post object
             const newPost = {
                 userId: currentUserId,
                 userName: currentUserName,
@@ -1658,11 +2278,9 @@
                 comments: []
             };
             
-            // Add to Firestore
             try {
                 await db.collection("posts").add(newPost);
                 
-                // Clear the form
                 postText.value = '';
                 imagePreviewContainer.classList.add('hidden');
                 imageUpload.value = '';
@@ -1680,7 +2298,6 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // Validate file type
             const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validTypes.includes(file.type)) {
                 alert('Please select a valid image file (JPEG, PNG, GIF)');
@@ -1688,8 +2305,7 @@
                 return;
             }
 
-            // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024; // 5MB
+            const maxSize = 5 * 1024 * 1024;
             if (file.size > maxSize) {
                 alert('Image size must be less than 5MB');
                 imageUpload.value = '';
@@ -1713,44 +2329,65 @@
             db.collection("publicMessages")
                 .orderBy("timestamp", "asc")
                 .onSnapshot((snapshot) => {
+                    const emptyState = chatMessagesContainer.querySelector('.empty-state');
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+                    
                     chatMessagesContainer.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        chatMessagesContainer.innerHTML = '<div class="empty-state">No messages yet. Start the conversation!</div>';
+                        return;
+                    }
+                    
                     snapshot.forEach((doc) => {
                         const message = doc.data();
-                        message.id = doc.id; // Add document ID to message
+                        message.id = doc.id;
                         renderMessage(message);
                     });
-                    // Scroll to bottom
+                    
                     setTimeout(() => {
                         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
                     }, 100);
                 }, (error) => {
                     console.error("Error loading messages:", error);
-                    alert("Error loading messages. Please refresh the page.");
+                    chatMessagesContainer.innerHTML = '<div class="empty-state">Error loading messages. Please refresh the page.</div>';
                 });
         }
 
         // Load private chat messages from Firestore
         function loadPrivateChatMessages(otherUserId) {
-            // Create a unique chat ID by combining user IDs in alphabetical order
             const chatId = [currentUserId, otherUserId].sort().join('_');
             
             db.collection("privateMessages")
                 .where("chatId", "==", chatId)
                 .orderBy("timestamp", "asc")
                 .onSnapshot((snapshot) => {
+                    const emptyState = chatMessagesContainer.querySelector('.empty-state');
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+                    
                     chatMessagesContainer.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        chatMessagesContainer.innerHTML = '<div class="empty-state">No messages yet. Start the conversation!</div>';
+                        return;
+                    }
+                    
                     snapshot.forEach((doc) => {
                         const message = doc.data();
-                        message.id = doc.id; // Add document ID to message
+                        message.id = doc.id;
                         renderMessage(message);
                     });
-                    // Scroll to bottom
+                    
                     setTimeout(() => {
                         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
                     }, 100);
                 }, (error) => {
                     console.error("Error loading private messages:", error);
-                    alert("Error loading private messages. Please refresh the page.");
+                    chatMessagesContainer.innerHTML = '<div class="empty-state">Error loading messages. Please refresh the page.</div>';
                 });
         }
 
@@ -1760,17 +2397,17 @@
             const messageElement = document.createElement('div');
             messageElement.className = `message ${isCurrentUser ? 'sent' : 'received'}`;
             
-            // Determine if the message has a photo or just initials
             const userDisplay = message.userPhotoUrl 
                 ? `<div class="profile-pic" style="background-image: url(${message.userPhotoUrl}); background-color: ${message.userColor || '#4285f4'}"></div>`
                 : `<div class="profile-pic" style="background-color: ${message.userColor || '#4285f4'}">${message.userPicText || 'U'}</div>`;
             
-            // Check if this is a reply
             const replyInfo = message.replyToMessageId ? `
                 <div style="font-size:12px;color:#777;margin-bottom:5px;">
                     Replying to ${message.replyToUserName || 'User'}
                 </div>
             ` : '';
+            
+            const timeAgo = message.timestamp ? getTimeAgo(message.timestamp.toDate()) : 'Just now';
             
             messageElement.innerHTML = `
                 ${userDisplay}
@@ -1778,6 +2415,7 @@
                     ${!isCurrentUser ? `<div class="message-user">${message.userName || 'User'}</div>` : ''}
                     ${replyInfo}
                     <div>${message.text}</div>
+                    <div class="message-time">${timeAgo}</div>
                     <div style="margin-top:5px;display:flex;gap:10px;">
                         <span style="font-size:12px;color:#777;cursor:pointer;" class="reply-btn" 
                               data-message-id="${message.id}" 
@@ -1794,7 +2432,6 @@
                 </div>
             `;
             
-            // Add event listeners
             const replyBtn = messageElement.querySelector('.reply-btn');
             const deleteBtn = messageElement.querySelector('.delete-btn');
             
@@ -1839,12 +2476,10 @@
                 return;
             }
             
-            // Show loading state
             const originalButtonText = sendMessageBtn.innerHTML;
             sendMessageBtn.innerHTML = '<span class="loading"></span>';
             sendMessageBtn.disabled = true;
             
-            // Create new message
             const newMessage = {
                 userId: currentUserId,
                 userName: currentUserName,
@@ -1855,24 +2490,27 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
             
-            // Add reply info if this is a reply
             if (replyingToMessageId) {
                 newMessage.replyToMessageId = replyingToMessageId;
                 newMessage.replyToUserName = replyingToUserName;
             }
             
-            // Determine which collection to use based on chat mode
             let collection;
             if (currentChatMode === 'public') {
                 collection = 'publicMessages';
             } else {
+                if (!currentPrivateChatUserId) {
+                    alert("Please select a user to chat with");
+                    sendMessageBtn.innerHTML = originalButtonText;
+                    sendMessageBtn.disabled = false;
+                    return;
+                }
+                
                 collection = 'privateMessages';
-                // For private messages, add chatId field
                 newMessage.chatId = [currentUserId, currentPrivateChatUserId].sort().join('_');
                 newMessage.recipientId = currentPrivateChatUserId;
             }
             
-            // Add to Firestore
             try {
                 await db.collection(collection).add(newMessage);
                 chatInput.value = '';
